@@ -14,5 +14,15 @@
     <string name="menu_contact_us">Contact us</string>
     <string name="menu_share">Share</string>
     <string name="requesting_result_from_internet">正在进行在线查询，请稍候…</string>
+    <string name="about">Powered by changfeng\nchangfeng1050@hotmail.com</string>
+    <string name="title_activity_recent_word">RecentWordActivity</string>
+
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_about">AboutActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

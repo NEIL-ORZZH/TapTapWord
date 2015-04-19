@@ -18,6 +18,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 public class ResultActivity extends Activity {
 
@@ -31,8 +33,12 @@ public class ResultActivity extends Activity {
     private static final int STATE_ORIGIN = 1;
     private static final int STATE_LOWERCASE = 2;
 
-
     private TextView translateResultTextView;
+
+    private String word_name;
+    private String ph_en;
+    private String ph_am;
+    private StringBuilder word_means;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +75,17 @@ public class ResultActivity extends Activity {
                             state = STATE_LOWERCASE;
                             clip = clip.toLowerCase();
                             sendRequestWithHttpClient(clip,"en", "zh");
+
                         } else {
                             translateResultTextView.setText(result);
+                            saveWord();
                         }
                     } else if (state == STATE_LOWERCASE) {
                         if (result.isEmpty()) {
                             translateResultTextView.setText(NO_RESULT);
                         } else {
                             translateResultTextView.setText(result);
+                            saveWord();
                         }
                     }
                     break;
@@ -120,6 +129,7 @@ public class ResultActivity extends Activity {
     private void parseJsonWithJsonObject(String jsonData) {
         try {
             JSONObject jsonObject = new JSONObject(jsonData);
+            word_means = new StringBuilder();
 
             if (jsonObject.getInt("errNum") == 0 && jsonObject.getString("errMsg").equals("success")) {
                 jsonObject = jsonObject.getJSONObject("retData");
@@ -127,16 +137,15 @@ public class ResultActivity extends Activity {
                     Log.d(TAG, "dict_result " + jsonObject.getString("dict_result"));
                     if (!jsonObject.getString("dict_result").equals("[]")){
                         jsonObject = jsonObject.getJSONObject("dict_result");
-                        String word_name = jsonObject.getString("word_name");
-
+                        word_name = jsonObject.getString("word_name");
                         JSONArray jsonArray = jsonObject.getJSONArray("symbols");
                         jsonObject = jsonArray.getJSONObject(0);
                         result = word_name + "\n\n";
-                        String ph_am = jsonObject.getString("ph_am");
+                        ph_am = jsonObject.getString("ph_am");
                         if (!ph_am.isEmpty()) {
                             result += "美:[" + ph_am + "] ";
                         }
-                        String ph_en = jsonObject.getString("ph_en");
+                        ph_en = jsonObject.getString("ph_en");
                         if (!ph_en.isEmpty()) {
                             result += "英:[" + ph_en + "] ";
                         }
@@ -150,6 +159,8 @@ public class ResultActivity extends Activity {
                             jsonObject = jsonArray.getJSONObject(i);
                             String part = jsonObject.getString("part");
                             result += part + "\n";
+                            word_means.append(part);
+                            word_means.append("\n");
 
                             Log.d(TAG, part);
                             JSONArray means;
@@ -157,9 +168,12 @@ public class ResultActivity extends Activity {
                             for (int j = 0; j < means.length(); j++) {
                                 String mean = means.getString(j);
                                 result += mean + "；";
+                                word_means.append(mean);
+                                word_means.append("；");
                                 Log.d(TAG, mean);
                             }
                             result += "\n";
+                            word_means.append("\n");
                         }
                     }
 
@@ -174,6 +188,17 @@ public class ResultActivity extends Activity {
         handler.sendMessage(message);
     }
 
+    private void saveWord() {
+        Word word = new Word();
+        word.setName(word_name);
+        word.setEnPhone(ph_en);
+        word.setAmPhone(ph_am);
+        word.setMeans(word_means.toString());
+
+        WordLab.get(getApplicationContext()).addWord(word);
+        WordLab.get(getApplicationContext()).saveWords();
+
+    }
     void showToast(String info) {
         Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT).show();
     }

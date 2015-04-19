@@ -18,6 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.gc.materialdesign.widgets.Dialog;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +31,8 @@ public class MainActivity extends ActionBarActivity {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
+
+    private RecentWordFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +71,24 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View view, int position) {
                 onDrawerMenuSelected(position);
                 switch (position) {
+                    case 1:
+                        setupFragment(new RecentWordFragment());
+                        break;
                     case 2:
                         startClipboardService();
+                        break;
+                    case 3:
+                        setupFragment(new WordFragment());
+                        break;
+                    case 4:
+                        setupFragment(new SettingFragment());
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                    case 7:
+                        setupFragment(new AboutFragment());
                         break;
                     default:
                         break;
@@ -77,8 +98,9 @@ public class MainActivity extends ActionBarActivity {
         });
         drawerOptions.setAdapter(adapter);
         drawerOptions.setHasFixedSize(true);
-        if (savedInstanceState == null) setupFragment(new SimpleFramgment());
-
+        if (savedInstanceState == null) {
+            setupFragment(new RecentWordFragment());
+        }
         startClipboardService();
     }
 
@@ -103,13 +125,13 @@ public class MainActivity extends ActionBarActivity {
     private void setupFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment currentFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
+
         if (currentFragment == null || !currentFragment.getClass().equals(fragment.getClass())) {
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, fragment, FRAGMENT_TAG)
                     .commit();
         }
     }
-
     private void onDrawerMenuSelected(int position) {
         drawerLayout.closeDrawers();
     }

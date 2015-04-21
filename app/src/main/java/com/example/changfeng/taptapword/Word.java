@@ -3,11 +3,7 @@ package com.example.changfeng.taptapword;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
-
-import javax.crypto.EncryptedPrivateKeyInfo;
 
 /**
  * Created by changfeng on 2015/4/19.
@@ -18,13 +14,14 @@ public class Word {
     private String mEnPhone;
     private String mAmPhone;
     private String mMeans;
-    private Date date;
+    private boolean mArchived = false;
 
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
     private static final String JSON_EN_PHONE = "en_phone";
     private static final String JSON_AM_PHONE = "am_phone";
     private static final String JSON_MEANS = "means";
+    private static final String JSON_ARCHIVED = "archived";
 
     public Word(JSONObject jsonObject) throws JSONException {
         mId = UUID.fromString(jsonObject.getString(JSON_ID));
@@ -40,6 +37,10 @@ public class Word {
             mMeans = jsonObject.getString(JSON_MEANS);
         }
 
+        if (jsonObject.has(JSON_ARCHIVED)) {
+            mArchived = jsonObject.getBoolean(JSON_ARCHIVED);
+        }
+
     }
 
     public JSONObject toJSON() throws JSONException {
@@ -49,7 +50,12 @@ public class Word {
         jsonObject.put(JSON_EN_PHONE, mEnPhone);
         jsonObject.put(JSON_AM_PHONE, mAmPhone);
         jsonObject.put(JSON_MEANS, mMeans);
+        jsonObject.put(JSON_ARCHIVED, mArchived);
         return jsonObject;
+    }
+
+    public UUID getId() {
+        return mId;
     }
 
     /**
@@ -106,12 +112,32 @@ public class Word {
         this.mAmPhone = amPhone;
     }
 
+    public String getFormatPhones() {
+        return "美:[" + getEnPhone() + "] " + "英:[" + getEnPhone() + "]";
+    }
+
+    public String getFormatEnPhone() {
+        return "英:[" + getEnPhone() + "] ";
+    }
+
+    public String getFormatAmPhone() {
+        return "美:[" + getEnPhone() + "] ";
+    }
+
     public void setMeans(String means) {
         this.mMeans = means;
     }
 
     public String getMeans() {
         return mMeans;
+    }
+
+    public void setArchived(boolean isArchived) {
+        this.mArchived = isArchived;
+    }
+
+    public boolean isArchived() {
+        return mArchived;
     }
 
     public Word() {
@@ -129,6 +155,5 @@ public class Word {
     public boolean hasMeans() {
         return mMeans != null;
     }
-
 
 }

@@ -32,8 +32,6 @@ public class MainActivity extends ActionBarActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
-    private RecentWordFragment fragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +50,7 @@ public class MainActivity extends ActionBarActivity {
                 new DrawerItem(DrawerItem.Type.HEADER),
                 new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_recent_words)),
                 new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_turn_tap_watching_on)),
-                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_all_words)),
+                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_words)),
                 new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_settings)),
                 new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_share)),
                 new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_contact_us)),
@@ -78,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
                         startClipboardService();
                         break;
                     case 3:
-                        setupFragment(new WordFragment());
+                        setupFragment(new WordsFragment());
                         break;
                     case 4:
                         setupFragment(new SettingFragment());

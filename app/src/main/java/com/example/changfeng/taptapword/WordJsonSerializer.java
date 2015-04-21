@@ -21,21 +21,21 @@ import java.util.ArrayList;
  */
 public class WordJsonSerializer {
     private Context context;
-    private String fianame;
+    private String filename;
 
-    public WordJsonSerializer(Context context, String fianame) {
+    public WordJsonSerializer(Context context, String filename) {
         this.context = context;
-        this.fianame = fianame;
+        this.filename = filename;
     }
 
     public ArrayList<Word> loadWords() throws IOException, JSONException {
         ArrayList<Word> words = new ArrayList<>();
         BufferedReader  reader = null;
         try {
-            InputStream in = context.openFileInput(fianame);
+            InputStream in = context.openFileInput(filename);
             reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder jsonString = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 jsonString.append(line);
             }
@@ -63,7 +63,7 @@ public class WordJsonSerializer {
 
         Writer writer = null;
         try {
-            OutputStream out = context.openFileOutput(fianame, Context.MODE_PRIVATE);
+            OutputStream out = context.openFileOutput(filename, Context.MODE_PRIVATE);
             writer = new OutputStreamWriter(out);
             writer.write(array.toString());
         } finally {

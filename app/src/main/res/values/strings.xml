@@ -22,6 +22,9 @@
     <string name="title_no_recent_words">没有未归档的单词</string>
     <string name="description_no_recent_words">赶紧去添加单词吧。\n开玩笑的啦，还是去玩乐一会吧。</string>
     <string name="text_view_archive">添加到生词本</string>
+    <string name="reset_preferences">Reset preference</string>
+    <string name="reset_all_data">Reset all data</string>
+    <string name="reset_all_preference">Reset all preference</string>
 
 
     <string name="hello_world">Hello world!</string>

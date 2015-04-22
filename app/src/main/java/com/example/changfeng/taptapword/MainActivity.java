@@ -79,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
                         setupFragment(new WordsFragment());
                         break;
                     case 4:
-                        setupFragment(new SettingFragment());
+                        setupFragment(new SettingsFragment());
                         break;
                     case 5:
                         break;

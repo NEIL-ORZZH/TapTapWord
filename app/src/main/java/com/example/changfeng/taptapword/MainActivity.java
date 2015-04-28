@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,9 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.gc.materialdesign.widgets.Dialog;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -82,8 +83,10 @@ public class MainActivity extends ActionBarActivity {
                         setupFragment(new SettingsFragment());
                         break;
                     case 5:
+                        shareByIntent();
                         break;
                     case 6:
+                        sendMailByIntent();
                         break;
                     case 7:
                         setupFragment(new AboutFragment());
@@ -100,6 +103,7 @@ public class MainActivity extends ActionBarActivity {
             setupFragment(new RecentWordFragment());
         }
         startClipboardService();
+
     }
 
     @Override
@@ -130,6 +134,7 @@ public class MainActivity extends ActionBarActivity {
                     .commit();
         }
     }
+
     private void onDrawerMenuSelected(int position) {
         drawerLayout.closeDrawers();
     }
@@ -147,22 +152,40 @@ public class MainActivity extends ActionBarActivity {
         showToast("Tap watching off");
     }
 
-    public static boolean isServiceRunning(Context mContext,String className) {
+    public static boolean isServiceRunning(Context mContext, String className) {
         boolean isRunning = false;
         ActivityManager activityManager = (ActivityManager)
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> serviceList
                 = activityManager.getRunningServices(30);
-        if (!(serviceList.size()>0)) {
+        if (!(serviceList.size() > 0)) {
             return false;
         }
-        for (int i=0; i<serviceList.size(); i++) {
+        for (int i = 0; i < serviceList.size(); i++) {
             if (serviceList.get(i).service.getClassName().equals(className) == true) {
                 isRunning = true;
                 break;
             }
         }
         return isRunning;
+    }
+
+    private void shareByIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(intent, getTitle()));
+    }
+
+    public void sendMailByIntent() {
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.setType("plain/text");
+        intent.putExtra(Intent.EXTRA_EMAIL, getString(R.string.mail_address));
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject));
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_text));
+        startActivity(Intent.createChooser(intent, "mail test"));
     }
 
     void showToast(String info) {

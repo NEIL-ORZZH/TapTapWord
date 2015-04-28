@@ -1,6 +1,7 @@
 package com.example.changfeng.taptapword;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public class WordLab {
 
     private static final String TAG = "WordLab";
-    private static final String FILENAME = "words.json";
+    public static final String FILENAME = "words.json";
 
     private ArrayList<Word> mWords;
     private WordJsonSerializer mSerializer;
@@ -53,6 +54,31 @@ public class WordLab {
             Log.e(TAG, "Error saving words: ", e);
             return false;
         }
+    }
+
+    public boolean backupWords(String fileName) {
+        WordJsonSerializer serializer = new WordJsonSerializer(mAppContext, fileName);
+        try {
+            serializer.saveWords(mWords);
+            Log.d(TAG, "backupWords called()");
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Error backup words", e);
+            return false;
+        }
+    }
+
+    public boolean restoreWords(String fileName) {
+        WordJsonSerializer Serializer = new WordJsonSerializer(mAppContext, fileName);
+
+        try {
+            mWords = mSerializer.loadWords();
+            return  true;
+        } catch (Exception e) {
+            Log.e(TAG, "Error restoring words:", e);
+            return false;
+        }
+
     }
 
     private WordLab(Context context) {

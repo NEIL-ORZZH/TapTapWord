@@ -22,7 +22,7 @@ public class AboutFragment extends Fragment {
         BigImageCard card = new BigImageCard(getActivity());
         card.setDescription("Powered by changfeng\nchangfeng1050@hotmail.com");
         card.setTitle("TapTapWord");
-        card.setDrawable("https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png");
+        card.setDrawable(R.drawable.git_hub);
 
         materialListView.add(card);
         return view;

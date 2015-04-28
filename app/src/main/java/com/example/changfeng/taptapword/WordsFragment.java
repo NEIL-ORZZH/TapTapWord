@@ -77,26 +77,34 @@ public class WordsFragment extends Fragment {
 
     private void updateListView() {
         materialListView.clear();
-        for (Word word : mArchivedWords) {
+        if (mWords.isEmpty()) {
             SimpleCard card = new SmallImageCard(getActivity());
-            card.setTitle(word.getName());
-            StringBuilder description = new StringBuilder();
-            if (!word.getAmPhone().isEmpty()) {
-                description.append(word.getFormatAmPhone());
-            }
-            if (!word.getEnPhone().isEmpty()) {
-                description.append(word.getFormatEnPhone());
-            }
-            description.append("\n\n");
-            if (!word.getMeans().isEmpty()) {
-                description.append(word.getMeans());
-            }
-
-            card.setDescription(description.toString());
-
-            card.setTag("SIMPLE_CARD");
+            card.setTitle(getString(R.string.title_no_recent_words));
+            card.setDescription(getString(R.string.description_no_recent_words));
             card.setDismissible(true);
             materialListView.add(card);
+        } else {
+            for (Word word : mArchivedWords) {
+                SimpleCard card = new SmallImageCard(getActivity());
+                card.setTitle(word.getName());
+                StringBuilder description = new StringBuilder();
+                if (!word.getAmPhone().isEmpty()) {
+                    description.append(word.getFormatAmPhone());
+                }
+                if (!word.getEnPhone().isEmpty()) {
+                    description.append(word.getFormatEnPhone());
+                }
+                description.append("\n\n");
+                if (!word.getMeans().isEmpty()) {
+                    description.append(word.getMeans());
+                }
+
+                card.setDescription(description.toString());
+
+                card.setTag("SIMPLE_CARD");
+                card.setDismissible(true);
+                materialListView.add(card);
+            }
         }
     }
 

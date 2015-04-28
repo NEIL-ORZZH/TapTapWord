@@ -21,10 +21,29 @@
     <string name="title_activity_recent_word">RecentWordActivity</string>
     <string name="title_no_recent_words">没有未归档的单词</string>
     <string name="description_no_recent_words">赶紧去添加单词吧。\n开玩笑的啦，还是去玩乐一会吧。</string>
+    <string name="title_no_archived_words">生词本没有单词</string>
+    <string name="description_no_archived_words">赶紧去添加单词吧</string>
     <string name="text_view_archive">添加到生词本</string>
-    <string name="reset_preferences">Reset preference</string>
+    <string name="title_reset_preferences">Reset preferences</string>
     <string name="reset_all_data">Reset all data</string>
-    <string name="reset_all_preference">Reset all preference</string>
+    <string name="message_reset_all_data">你所有的数据将被清除！</string>
+    <string name="reset_all_preference">Reset all preferences</string>
+    <string name="message_reset_all_preferences">你所有的设置将被清除！</string>
+
+    <string name="title_backup_and_restore">Backup and Restore</string>
+    <string name="backup">Backup data</string>
+    <string name="message_backup_data">将备份你的数据。</string>
+    <string name="restore">Restore data</string>
+    <string name="message_restore_data">将恢复你的数据，现有的数据将被覆盖</string>
+    <string name="clear_backup_data">Clear all backup data</string>
+    <string name="message_clear_backup_data">将清除你的所有备份数据！</string>
+
+    <string name="share_subject">分享TapTapWord</string>
+    <string name="share_text">Hi，朋友们，我正在使用TapTapWord！它可以在读文章或者网页的时候，选中需要翻译的单词之后复制，直接返回翻译结果！Enjoy it！</string>
+
+    <string name="mail_address">changfeng1050@hotmail.com</string>
+    <string name="mail_subject">TapTapWord的反馈</string>
+    <string name="mail_text">Hi! changfeng1050, I`m using TapTapWord.And…</string>
 
 
     <string name="hello_world">Hello world!</string>

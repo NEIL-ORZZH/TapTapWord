@@ -2,6 +2,7 @@ package com.example.changfeng.taptapword;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,16 +46,19 @@ public class WordActivity extends Activity implements View.OnClickListener {
         wordNameEditText.setText(intent.getStringExtra(EXTRA_WORD_NAME));
         wordNameEditText.setHideUnderline(true);
         wordNameEditText.setPaddings(10, 20, 20, 10);
+        wordNameEditText.setTextColor(Color.parseColor(MainActivity.SELECTED_COLOR));
 
         archiveCheckBox.setChecked(intent.getBooleanExtra(EXTRA_WORD_ARCHIVED, true));
 
         phoneEditText.setText(intent.getStringExtra(EXTRA_WORD_PHONE));
         phoneEditText.setHideUnderline(true);
         phoneEditText.setPaddings(30, 20, 20, 10);
+        phoneEditText.setTextColor(Color.parseColor(MainActivity.WORD_TEXT_COLOR));
 
         meansEditText.setText(intent.getStringExtra(EXTRA_WORD_MEANS));
         meansEditText.setHideUnderline(true);
-        meansEditText.setPaddings(30, 20, 20, 10 );
+        meansEditText.setPaddings(30, 20, 20, 10);
+        meansEditText.setTextColor(Color.parseColor(MainActivity.WORD_TEXT_COLOR));
 
         cancelButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);

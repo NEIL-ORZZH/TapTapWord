@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary"
+            android:background="#4caf50"
             android:minHeight="?attr/actionBarSize"/>
 
         <FrameLayout
@@ -30,13 +30,13 @@
         android:layout_gravity="start"
         android:background="@android:color/white"
         android:fitsSystemWindows="true"
-        sifl:insetForeground="#4000">
+        sifl:insetForeground="#4caf50">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/drawer_options"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#212121"/>
+            android:background="#4caf50"/>
     </com.example.changfeng.taptapword.ScrimInsetsFrameLayout>
 
 </android.support.v4.widget.DrawerLayout>

@@ -27,7 +27,7 @@ public class ClipboardService extends Service {
         super.onCreate();
 
         count++;
-        showToast(TAG + " OnCreate() " + count + " times.");
+//        showToast(TAG + " OnCreate() " + count + " times.");
     }
 
     @Override

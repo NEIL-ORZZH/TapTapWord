@@ -1,5 +1,8 @@
 package com.example.changfeng.taptapword;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -7,10 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Toast;
 
 import com.gc.materialdesign.widgets.Dialog;
 import com.rey.material.widget.TextView;
+
+import junit.framework.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,12 +24,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
 public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "SettingsFragment";
+    static final int REQUEST_BACKUP_FILE = 1;
+    private static final String FILE_KEY_WORD = "TapTapWord";
 
     private TextView resetAllDataTextView;
     private TextView resetAllPreferencesTextView;
@@ -88,7 +97,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 backupDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MyFile.copyFile(new File(getActivity().getFileStreamPath(WordLab.FILENAME).getPath()), MyFile.getOutputBackupFile());
+                        if (WordLab.get(getActivity()).backupWords(MyFile.getOutputBackupFile())) {
+                            showToast(getString(R.string.message_data_backupped), Toast.LENGTH_SHORT);
+                        } else {
+                            showToast(getString(R.string.message_data_backupped_failed), Toast.LENGTH_SHORT);
+                        }
                     }
 
                 });
@@ -100,7 +113,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 restoreDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v){
-
+                        Intent intent = new Intent(getActivity(), FileListActivity.class);
+                        intent.putExtra(FileListActivity.FILE_KEY_WORD, "TapTapWord");
+                        startActivityForResult(intent, REQUEST_BACKUP_FILE);
                     }
                 });
                 restoreDialog.setCancelable(true);
@@ -111,6 +126,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 clearDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        clearAllBackupData();
+                        showToast(getString(R.string.message_all_backup_data_cleared), Toast.LENGTH_SHORT);
                     }
                 });
                 clearDialog.setCancelable(true);
@@ -118,5 +135,43 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult() called resultCode :" + requestCode + " requestCode :" + requestCode);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_BACKUP_FILE:
+                    Bundle bundle = data.getExtras();
+                    String filename = bundle.getString(FileListActivity.FILE_KEY_WORD);
+                    WordLab.get(getActivity()).restoreWords(new File(filename));
+                    showToast(getString(R.string.message_data_restored), Toast.LENGTH_SHORT);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void clearAllBackupData() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            File path = Environment.getExternalStorageDirectory();
+            File files[] = path.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        continue;
+                    }
+                    if (file.getName().contains(FILE_KEY_WORD)) {
+                        MyFile.deleleFile(file.getAbsolutePath());
+                    }
+                }
+            }
+        }
+    }
+
+    private void showToast(String message, int duration) {
+        Toast.makeText(getActivity(), message, duration).show();
     }
 }

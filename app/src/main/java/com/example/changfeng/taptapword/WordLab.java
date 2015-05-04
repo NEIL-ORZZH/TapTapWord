@@ -4,6 +4,7 @@ import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -56,30 +57,38 @@ public class WordLab {
         }
     }
 
-    public boolean backupWords(String fileName) {
-        WordJsonSerializer serializer = new WordJsonSerializer(mAppContext, fileName);
+    public boolean backupWords(File externFile) {
         try {
-            serializer.saveWords(mWords);
-            Log.d(TAG, "backupWords called()");
+            mSerializer.backupWords(externFile, mWords);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error backup words", e);
+            Log.e(TAG, "Error backup words:", e);
             return false;
         }
     }
 
-    public boolean restoreWords(String fileName) {
-        WordJsonSerializer Serializer = new WordJsonSerializer(mAppContext, fileName);
-
+    public boolean restoreWords(File externFile) {
+        Log.d(TAG, "WordLab() called");
         try {
-            mWords = mSerializer.loadWords();
-            return  true;
+            mWords = mSerializer.restoreWords(externFile);
+            return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error restoring words:", e);
+            Log.e(TAG, "Error loading words: ", e);
             return false;
         }
-
     }
+
+    public boolean isAllAchived() {
+        for (Word word : mWords) {
+            if (!word.isArchived()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
 
     private WordLab(Context context) {
         Log.d(TAG, "WordLab() called");

@@ -78,12 +78,13 @@ public class MyFile {
                 RandomAccessFile raf = new RandomAccessFile(dstPath, "rw");
 
 
-                byte[] buffer = new byte[1444];
+                byte[] buffer = new byte[1024];
                 while ( (byteRead = inStream.read(buffer)) != -1) {
                     byteSum += byteRead; //字节数 文件大小
                     System.out.println(byteSum);
                     raf.seek(dstPath.length());
                     raf.write(buffer);
+                    Log.d(TAG, "copy :" + byteRead + "bytes");
                 }
                 inStream.close();
                 raf.close();
@@ -95,6 +96,14 @@ public class MyFile {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static boolean deleleFile(String fileName){
+        File file = new File(fileName);
+        if(file.isFile()){
+            return file.delete();
+        }
+        return false;
     }
 
 }

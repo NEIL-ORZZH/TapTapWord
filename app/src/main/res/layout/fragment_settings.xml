@@ -10,52 +10,75 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+
+            <com.rey.material.widget.TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:paddingTop="20dp"
+                android:longClickable="false"
+                android:text="@string/title_reset_preferences"
+                android:textColor="#4caf50"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#4caf50" />
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/reset_all_data"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:text="@string/reset_all_data"
+                android:textSize="25sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1bbc9b"/>
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/reset_all_preferences"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:text="@string/reset_all_preference"
+                android:textSize="25sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1bbc9b"/>
+
+        </LinearLayout>
+
+
         <com.rey.material.widget.TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="25sp"
             android:paddingTop="20dp"
             android:longClickable="false"
-            android:text="@string/title_reset_preferences" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#673AB7" />
-
-        <com.rey.material.widget.TextView
-            android:id="@+id/reset_all_data"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:text="@string/reset_all_data"
-            android:textSize="20sp" />
-
-        <com.rey.material.widget.TextView
-            android:id="@+id/reset_all_preferences"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:text="@string/reset_all_preference"
-            android:textSize="20sp" />
-
-        <com.rey.material.widget.TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:paddingTop="20dp"
-            android:longClickable="false"
-            android:text="@string/title_backup_and_restore" />
+            android:text="@string/title_backup_and_restore"
+            android:textColor="#4caf50"/>
 
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#673AB7" />
+            android:background="#4caf50" />
 
         <com.rey.material.widget.TextView
             android:id="@+id/backup_data"
@@ -65,7 +88,12 @@
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="@string/backup"
-            android:textSize="20sp" />
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1bbc9b"/>
 
         <com.rey.material.widget.TextView
             android:id="@+id/restore_data"
@@ -75,7 +103,13 @@
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="@string/restore"
-            android:textSize="20sp" />
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1bbc9b"/>
+
 
         <com.rey.material.widget.TextView
             android:id="@+id/clear_backup_data"
@@ -85,7 +119,13 @@
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="@string/clear_backup_data"
-            android:textSize="20sp" />
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1bbc9b"/>
+
 
     </LinearLayout>
 

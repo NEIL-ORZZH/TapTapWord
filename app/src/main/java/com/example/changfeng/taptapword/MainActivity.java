@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -54,34 +58,41 @@ public class MainActivity extends ActionBarActivity {
         drawerLayout.setDrawerListener(drawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        List<DrawerItem> drawerItems = Arrays.asList(
+        final List<DrawerItem> drawerItems = Arrays.asList(
                 new DrawerItem(DrawerItem.Type.HEADER),
-                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_recent_words)),
-                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_turn_tap_watching_on_off)),
-                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_words)),
-                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_settings)),
-                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_share)),
-                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_contact_us)),
-                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_about)));
-//                new DrawerMenu().setIconRes(R.drawable.ic_group).setText(getString(R.string.menu_template, 1)),
-//                new DrawerMenu().setIconRes(R.drawable.ic_map).setText(getString(R.string.menu_template, 2)),
-//                new DrawerItem(DrawerItem.Type.DIVIDER),
-//                new DrawerMenu().setIconRes(R.drawable.ic_person).setText(getString(R.string.menu_template, 3)),
-//                new DrawerMenu().setIconRes(R.drawable.ic_search).setText(getString(R.string.menu_template, 4)),
-//                new DrawerItem(DrawerItem.Type.DIVIDER),
-//                new DrawerMenu().setIconRes(R.drawable.ic_settings).setText(getString(R.string.menu_settings)));
+                new DrawerMenu().setIconRes(R.drawable.ic_recent).setText(getString(R.string.menu_recent_words)),
+                new DrawerMenu().setIconRes(R.drawable.ic_word).setText(getString(R.string.menu_words)),
+                new DrawerItem(DrawerItem.Type.DIVIDER),
+                new DrawerMenu().setIconRes(R.drawable.ic_watch).setText(getString(R.string.menu_turn_tap_watching_on_off)),
+                new DrawerItem(DrawerItem.Type.DIVIDER),
+                new DrawerMenu().setIconRes(R.drawable.ic_settings).setText(getString(R.string.menu_settings)),
+                new DrawerItem(DrawerItem.Type.DIVIDER),
+                new DrawerMenu().setIconRes(R.drawable.ic_help).setText(getString(R.string.menu_help)),
+                new DrawerItem(DrawerItem.Type.DIVIDER),
+                new DrawerMenu().setIconRes(R.drawable.abc_ic_menu_share_mtrl_alpha).setText(getString(R.string.menu_share)),
+                new DrawerMenu().setIconRes(R.drawable.ic_contact).setText(getString(R.string.menu_contact_us)),
+                new DrawerMenu().setIconRes(R.drawable.ic_about).setText(getString(R.string.menu_about)));
         drawerOptions.setLayoutManager(new LinearLayoutManager(this));
-        DrawerItemAdapter adapter = new DrawerItemAdapter(drawerItems);
+        final DrawerItemAdapter adapter = new DrawerItemAdapter(drawerItems);
         adapter.setOnItemClickListener(new DrawerItemAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 onDrawerMenuSelected(position);
                 switch (position) {
+                    case 0:
+
+                        break;
                     case 1:
                         setupFragment(new RecentWordFragment());
                         setTitle(getString(R.string.menu_recent_words));
                         break;
-                    case 2: {
+                    case 2:
+                        setupFragment(new WordsFragment());
+                        setTitle(getString(R.string.menu_words));
+                        break;
+                    case 3: // Divider
+                        break;
+                    case 4:
                         // TODO:need to be fixed
                         if (!isWatchOn) {
                             startClipboardService();
@@ -91,23 +102,27 @@ public class MainActivity extends ActionBarActivity {
                             showToast("单词忍者正在监听");
                         }
                         isWatchOn = !isWatchOn;
-                    }
-                    break;
-                    case 3:
-                        setupFragment(new WordsFragment());
-                        setTitle(getString(R.string.menu_words));
                         break;
-                    case 4:
+                    case 5:// Divider
+                        break;
+                    case 6:
                         setupFragment(new SettingsFragment());
                         setTitle(getString(R.string.menu_settings));
                         break;
-                    case 5:
+                    case 7: // Divider
+                        break;
+                    case 8:
+                        setupFragment(new HelpFragment());
+                        setTitle(getString(R.string.menu_help));
+                    case 9:// Divider
+                        break;
+                    case 10:
                         shareByIntent();
                         break;
-                    case 6:
+                    case 11:
                         sendMailByIntent();
                         break;
-                    case 7:
+                    case 12:
                         setupFragment(new AboutFragment());
                         setTitle(getString(R.string.menu_about));
                         break;
@@ -118,9 +133,52 @@ public class MainActivity extends ActionBarActivity {
         });
         drawerOptions.setAdapter(adapter);
         drawerOptions.setHasFixedSize(true);
-        if (savedInstanceState == null) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!prefs.getBoolean("first_time", false)) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("first_time", true);
+            editor.commit();
+
+            setupFragment(new HelpFragment());
+
+            Word archiveWord = new Word();
+            archiveWord.setName(getString(R.string.word_archive_name));
+            archiveWord.setAmPhone(getString(R.string.word_archive_ph_am));
+            archiveWord.setEnPhone(getString(R.string.word_archive_ph_en));
+            archiveWord.setMeans(getString(R.string.word_archive_means));
+            WordLab.get(getApplicationContext()).addWord(archiveWord);
+
+            Word deleteWord = new Word();
+            deleteWord.setName(getString(R.string.word_delete_name));
+            deleteWord.setAmPhone(getString(R.string.word_delete_ph_am));
+            deleteWord.setEnPhone(getString(R.string.word_delete_ph_en));
+            deleteWord.setMeans(getString(R.string.word_delete_means));
+            WordLab.get(getApplicationContext()).addWord(deleteWord);
+
+            Word unarchiveWord = new Word();
+            unarchiveWord.setName(getString(R.string.word_unarchive_name));
+            unarchiveWord.setAmPhone(getString(R.string.word_unarchive_ph_am));
+            unarchiveWord.setEnPhone(getString(R.string.word_unarchive_ph_en));
+            unarchiveWord.setMeans(getString(R.string.word_unarchive_means));
+            unarchiveWord.setArchived(true);
+            WordLab.get(getApplicationContext()).addWord(unarchiveWord);
+
+            Word delete2Word = new Word();
+            delete2Word.setName(getString(R.string.word_delete2_name));
+            delete2Word.setAmPhone(getString(R.string.word_delete2_ph_am));
+            delete2Word.setEnPhone(getString(R.string.word_delete2_ph_en));
+            delete2Word.setMeans(getString(R.string.word_delete2_means));
+            delete2Word.setArchived(true);
+            WordLab.get(getApplicationContext()).addWord(delete2Word);
+
+            WordLab.get(getApplicationContext()).saveWords();
+        } else {
             setupFragment(new RecentWordFragment());
         }
+
+        startClipboardService();
+
     }
 
     @Override

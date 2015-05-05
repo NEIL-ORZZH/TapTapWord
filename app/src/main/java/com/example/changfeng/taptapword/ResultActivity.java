@@ -1,6 +1,7 @@
 package com.example.changfeng.taptapword;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -78,6 +79,7 @@ public class ResultActivity extends Activity {
 
                         } else {
                             translateResultTextView.setText(result);
+                            translateResultTextView.setTextColor(Color.parseColor(MainActivity.SELECTED_COLOR));
                             saveWord();
                         }
                     } else if (state == STATE_LOWERCASE) {

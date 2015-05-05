@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">单词忍者</string>
     <string name="hello">Hello world!</string>
-    <string name="user_name">用户名</string>
+    <string name="user_name">Word Ninja\nSpy into words for you</string>
     <string name="drawer_open">Menu Opened</string>
     <string name="drawer_close">Menu Closed</string>
     <string name="menu_template">Menu %d</string>
@@ -10,6 +10,7 @@
     <string name="menu_recent_words">最近单词</string>
     <string name="menu_words">已归档</string>
     <string name="menu_settings">设置</string>
+    <string name="menu_help">帮助</string>
     <string name="menu_about">关于</string>
     <string name="menu_contact_us">联系我们</string>
     <string name="menu_share">分享</string>
@@ -69,6 +70,39 @@
 
     <string name="message_edit_success">编辑成功</string>
     <string name="message_edit_failed">编辑失败</string>
+
+    <string name="title_welcome">欢迎使用单词忍者</string>
+    <string name="description_welcome">使用之前请阅读以下使用说明</string>
+    <string name="title_tutorOne">1.打开任意阅读APP</string>
+    <string name="title_tutorTwo">2.选中不熟悉的单词</string>
+    <string name="title_tutorThree">3.复制单词</string>
+    <string name="title_tutorFour">4.查阅单词的网络释义</string>
+    <string name="title_tutorFive">5.在单词忍者中查看单词</string>
+
+    <string name="word_word_name">word</string>
+    <string name="word_word_ph_am">""</string>
+    <string name="word_word_ph_en">""</string>
+    <string name="word_word_means">单词忍者偷取的单词都会保存在这里，你可以对单词进行删除或者归档</string>
+
+    <string name="word_archive_name">archive</string>
+    <string name="word_archive_ph_am">""</string>
+    <string name="word_archive_ph_en">""</string>
+    <string name="word_archive_means">归档；向左或右滑动单词卡片</string>
+
+    <string name="word_unarchive_name">unarchive</string>
+    <string name="word_unarchive_ph_am">""</string>
+    <string name="word_unarchive_ph_en">""</string>
+    <string name="word_unarchive_means">取消归档；长按单词卡片，然后按右上角“取消归档”</string>
+
+    <string name="word_delete2_name">delete</string>
+    <string name="word_delete2_ph_am">""</string>
+    <string name="word_delete2_ph_en">""</string>
+    <string name="word_delete2_means">删除；向左或右滑动单词卡片</string>
+
+    <string name="word_delete_name">delete</string>
+    <string name="word_delete_ph_am">""</string>
+    <string name="word_delete_ph_en">""</string>
+    <string name="word_delete_means">删除；长按单词卡片，然后按右上角“删除”</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

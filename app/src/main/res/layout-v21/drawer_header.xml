@@ -24,7 +24,7 @@
             android:layout_height="60dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_contact_picture"/>
+            android:src="@drawable/ninja"/>
 
         <TextView
             android:id="@+id/user_name"

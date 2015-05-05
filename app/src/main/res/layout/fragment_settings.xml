@@ -19,7 +19,7 @@
 
 
             <com.rey.material.widget.TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
                 android:paddingTop="20dp"
@@ -35,7 +35,7 @@
             <com.rey.material.widget.TextView
                 android:id="@+id/reset_all_data"
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
@@ -50,8 +50,8 @@
             <com.rey.material.widget.TextView
                 android:id="@+id/reset_all_preferences"
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
                 android:text="@string/reset_all_preference"
@@ -66,7 +66,7 @@
 
 
         <com.rey.material.widget.TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="25sp"
             android:paddingTop="20dp"
@@ -83,7 +83,7 @@
         <com.rey.material.widget.TextView
             android:id="@+id/backup_data"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
@@ -98,8 +98,8 @@
         <com.rey.material.widget.TextView
             android:id="@+id/restore_data"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="@string/restore"
@@ -114,8 +114,8 @@
         <com.rey.material.widget.TextView
             android:id="@+id/clear_backup_data"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="@string/clear_backup_data"

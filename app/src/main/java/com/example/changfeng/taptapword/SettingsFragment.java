@@ -97,8 +97,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 backupDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (WordLab.get(getActivity()).backupWords(MyFile.getOutputBackupFile())) {
-                            showToast(getString(R.string.message_data_backupped), Toast.LENGTH_SHORT);
+                        File file = MyFile.getOutputBackupFile();
+                        if (WordLab.get(getActivity()).backupWords(file)) {
+                            showToast(getString(R.string.message_data_backupped) + file.getAbsolutePath(), Toast.LENGTH_SHORT);
                         } else {
                             showToast(getString(R.string.message_data_backupped_failed), Toast.LENGTH_SHORT);
                         }

@@ -158,6 +158,9 @@ public class WordsFragment extends Fragment {
                     showToast(getString(R.string.message_unarchive_success), Toast.LENGTH_SHORT);
                     mode.finish();
                     break;
+                case R.id.action_select_all:
+                    selectAll();
+                    checkAll();
                 default:
                     return false;
             }
@@ -289,6 +292,19 @@ public class WordsFragment extends Fragment {
         for (Integer position : positions) {
             deleteWord(position);
         }
+    }
+
+
+    private void selectAll() {
+        selectedItemPositions.clear();
+        for (int i = 0; i < mArchivedWords.size(); i++) {
+            selectedItemPositions.add(i);
+        }
+    }
+
+    private void checkAll() {
+        materialListView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
+
     }
 
     private boolean isSelected(int position) {

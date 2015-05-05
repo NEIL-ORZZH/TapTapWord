@@ -113,6 +113,7 @@ public class Word {
     }
 
     public String getFormatPhones() {
+
         return "美:[" + getEnPhone() + "] " + "英:[" + getEnPhone() + "]";
     }
 

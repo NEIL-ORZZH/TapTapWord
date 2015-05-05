@@ -55,12 +55,12 @@ public class ResultActivity extends Activity {
         state = STATE_ORIGIN;
         sendRequestWithHttpClient(clip, "en", "zh");
         count++;
-        showToast(TAG + " onCreate() " + count + " times.");
+//        showToast(TAG + " onCreate() " + count + " times.");
     }
 
     @Override
     protected void onDestroy() {
-        showToast(TAG + "onDestroy() called.");
+//        showToast(TAG + "onDestroy() called.");
         super.onDestroy();
     }
 
@@ -151,7 +151,10 @@ public class ResultActivity extends Activity {
                         if (!ph_en.isEmpty()) {
                             result += "英:[" + ph_en + "] ";
                         }
-                        result += "\n\n";
+
+                        if (!(ph_am.isEmpty() && ph_en.isEmpty())){
+                            result += "\n\n";
+                        }
 
                         Log.d(TAG, ph_am);
                         Log.d(TAG, ph_en);

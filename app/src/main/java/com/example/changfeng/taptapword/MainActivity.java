@@ -5,6 +5,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -32,6 +34,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import net.youmi.android.AdManager;
+import net.youmi.android.spot.SpotManager;
+
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
@@ -47,6 +52,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -203,7 +210,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult() called resultCode :" + requestCode + " requestCode :" + requestCode);
     }
 
@@ -271,6 +278,8 @@ public class MainActivity extends ActionBarActivity {
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_text));
         startActivity(Intent.createChooser(intent, "Mail Chooser"));
     }
+
+
 
     void showToast(String info) {
         Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT).show();

@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.1"
     }
     buildTypes {
         release {
@@ -28,4 +28,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.3'
     compile 'com.android.support:cardview-v7:21.0.3'
     compile 'com.github.navasmdc:MaterialDesign:1.+@aar'
+    compile files('E:/workplace/AndroidStudioProjects/TapTapWord/libs/YoumiSdk_v5.00_2015-01-08.jar')
 }

@@ -121,8 +121,8 @@ public class WordsFragment extends Fragment {
                 if (!mWords.isEmpty()) {
                     mWords.remove(mArchivedWords.get(position));
                     showToast(getString(R.string.message_delete_success), Toast.LENGTH_SHORT);
-                    updateArchivedWords();
                 }
+                updateArchivedWords();
                 updateListView();
             }
         });
@@ -198,6 +198,7 @@ public class WordsFragment extends Fragment {
                 word.setEnPhone(emPhone);
 
                 updateArchivedWords();
+                updateListView();
 
                 Log.d(TAG, word.getName() + " " + word.getAmPhone() + " " + word.getEnPhone() + " " + word.getMeans());
             }
@@ -208,10 +209,12 @@ public class WordsFragment extends Fragment {
     private void updateListView() {
         materialListView.removeAllViews();
         materialListView.clear();
-        if (mWords.isEmpty()) {
+
+        if (mArchivedWords.isEmpty()) {
             SimpleCard card = new SmallImageCard(getActivity());
             card.setTitle(getString(R.string.title_no_archived_words));
             card.setDescription(getString(R.string.description_no_archived_words));
+            card.setTag("SIMPLE_CARD");
             card.setDismissible(true);
             card.setBackgroundColor(Color.WHITE);
             card.setTitleColor(Color.parseColor(MainActivity.SELECTED_COLOR));

@@ -149,6 +149,12 @@ public class MainActivity extends ActionBarActivity {
 
             setupFragment(new HelpFragment());
 
+            Word word = new Word();
+            word.setName("word");
+            word.setAmPhone("");
+            word.setEnPhone("");
+            word.setMeans("单词；你查阅过的单词将会在这里保存");
+            WordLab.get(getApplicationContext()).addWord(word);
             Word archiveWord = new Word();
             archiveWord.setName(getString(R.string.word_archive_name));
             archiveWord.setAmPhone(getString(R.string.word_archive_ph_am));
@@ -267,7 +273,7 @@ public class MainActivity extends ActionBarActivity {
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(Intent.createChooser(intent, getTitle()));
+        startActivity(Intent.createChooser(intent, "分享给你的亲友们"));
     }
 
     public void sendMailByIntent() {
@@ -276,7 +282,7 @@ public class MainActivity extends ActionBarActivity {
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.mail_address)});
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject));
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_text));
-        startActivity(Intent.createChooser(intent, "Mail Chooser"));
+        startActivity(Intent.createChooser(intent, "请选择你的邮箱应用"));
     }
 
 

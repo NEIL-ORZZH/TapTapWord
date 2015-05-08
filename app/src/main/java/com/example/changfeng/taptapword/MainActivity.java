@@ -149,11 +149,26 @@ public class MainActivity extends ActionBarActivity {
             setupFragment(new HelpFragment());
 
             Word word = new Word();
-            word.setName("word");
-            word.setAmPhone("");
-            word.setEnPhone("");
-            word.setMeans("单词；你查阅过的单词将会在这里保存");
+            word.setName(getString(R.string.word_word_name));
+            word.setAmPhone(getString(R.string.word_word_ph_am));
+            word.setEnPhone(getString(R.string.word_word_ph_en));
+            word.setMeans(getString(R.string.word_word_means));
             WordLab.get(getApplicationContext()).addWord(word);
+
+            Word ninjaWord = new Word();
+            ninjaWord.setName(getString(R.string.word_ninja_name));
+            ninjaWord.setAmPhone(getString(R.string.word_ninja_ph_am));
+            ninjaWord.setEnPhone(getString(R.string.word_ninja_ph_en));
+            ninjaWord.setMeans(getString(R.string.word_ninja_means));
+            WordLab.get(getApplicationContext()).addWord(ninjaWord);
+
+            Word recentWord = new Word();
+            recentWord.setName(getString(R.string.word_recent_name));
+            recentWord.setAmPhone(getString(R.string.word_recent_ph_am));
+            recentWord.setEnPhone(getString(R.string.word_recent_ph_en));
+            recentWord.setMeans(getString(R.string.word_recent_means));
+            WordLab.get(getApplicationContext()).addWord(recentWord);
+
             Word archiveWord = new Word();
             archiveWord.setName(getString(R.string.word_archive_name));
             archiveWord.setAmPhone(getString(R.string.word_archive_ph_am));

@@ -6,13 +6,13 @@
     <string name="drawer_open">Menu Opened</string>
     <string name="drawer_close">Menu Closed</string>
     <string name="menu_template">Menu %d</string>
-    <string name="menu_turn_tap_watching_on_off">开启忍者监听</string>
+    <string name="menu_turn_tap_watching_on_off">忍者监听</string>
     <string name="menu_recent_words">最近单词</string>
     <string name="menu_words">已归档</string>
     <string name="menu_settings">设置</string>
     <string name="menu_help">帮助</string>
     <string name="menu_about">关于</string>
-    <string name="menu_contact_us">联系我们</string>
+    <string name="menu_contact_us">给我们发邮件</string>
     <string name="menu_share">分享</string>
     <string name="requesting_result_from_internet">正在进行在线查询，请稍候…</string>
     <string name="about">Powered by changfeng\nchangfeng1050@hotmail.com</string>
@@ -65,44 +65,56 @@
     <string name="message_delete_success">删除成功</string>
     <string name="message_delete_failed">删除失败</string>
 
-    <string name="message_unarchive_success">退回最近单词成功</string>
-    <string name="message_unarchive_failed">退回最近单词失败</string>
+    <string name="message_unarchive_success">取消归档成功</string>
+    <string name="message_unarchive_failed">取消归档失败</string>
 
     <string name="message_edit_success">编辑成功</string>
     <string name="message_edit_failed">编辑失败</string>
 
     <string name="title_welcome">欢迎使用单词忍者</string>
-    <string name="description_welcome">阅读英文时，请随时召唤单词使者，刺探单词释义\n\n使用之前请阅读以下使用说明</string>
+    <string name="description_welcome">阅读英文时，请随时召唤单词忍者，刺探单词释义\n\n使用之前请阅读以下使用说明</string>
     <string name="title_tutorOne">1.打开任意阅读APP</string>
     <string name="title_tutorTwo">2.选中不熟悉的单词</string>
     <string name="title_tutorThree">3.复制单词</string>
     <string name="title_tutorFour">4.查阅单词的网络释义</string>
     <string name="title_tutorFive">5.在单词忍者中查看单词</string>
 
+    <string name="word_ninja_name">Ninja</string>
+    <string name="word_ninja_ph_am">"'nɪndʒə"</string>
+    <string name="word_ninja_ph_en">"'nɪndʒə"</string>
+    <string name="word_ninja_means">n.\n忍者（受过日本传统打斗和轻功训练的人）\nn.\n请将忍者监听打开，以便忍者在你阅读的时候窃取单词</string>
+
+    <string name="word_recent_name">recent</string>
+    <string name="word_recent_ph_am">"'risənt"</string>
+    <string name="word_recent_ph_en">"'riːs(ə)nt"</string>
+    <string name="word_recent_means">adj.\n最近的；新近的;\nadj.\n这里存放单词忍者窃取的单词</string>
+
     <string name="word_word_name">word</string>
-    <string name="word_word_ph_am">""</string>
-    <string name="word_word_ph_en">""</string>
-    <string name="word_word_means">单词忍者偷取的单词都会保存在这里，你可以对单词进行删除或者归档</string>
+    <string name="word_word_ph_am">"wɜrd"</string>
+    <string name="word_word_ph_en">"wɜː(r)d"</string>
+    <string name="word_word_means">n.\n词；单词；字；消息\nv.\n措辞；用词\nint.\n说得对 \nn.\n单词忍者窃取的单词都会保存在这里，你可以对长按单词卡片进行删除或者归档</string>
 
     <string name="word_archive_name">archive</string>
-    <string name="word_archive_ph_am">""</string>
-    <string name="word_archive_ph_en">""</string>
-    <string name="word_archive_means">归档；向左或右滑动单词卡片</string>
+    <string name="word_archive_ph_am">"'ɑr.kaɪv"</string>
+    <string name="word_archive_ph_en">"'ɑː(r)kaɪv"</string>
+    <string name="word_archive_means">n\n档案；档案馆；档案室\n\v.把…存档；把…归档；将（不常用消息）存档\nv.\n向左或右滑动单词卡片进行归档</string>
 
     <string name="word_unarchive_name">unarchive</string>
-    <string name="word_unarchive_ph_am">""</string>
-    <string name="word_unarchive_ph_en">""</string>
-    <string name="word_unarchive_means">取消归档；长按单词卡片，然后按右上角“取消归档”</string>
+    <string name="word_unarchive_ph_am">"ʌn'ɑː(r)kaɪv"</string>
+    <string name="word_unarchive_ph_en">"ʌn'ɑː(r)kaɪv"</string>
+    <string name="word_unarchive_means">n.\n取消存档；反归档\nv.\n长按单词卡片，然后按右上角“取消归档”，可将单词移到最近单词</string>
 
     <string name="word_delete2_name">delete</string>
-    <string name="word_delete2_ph_am">""</string>
-    <string name="word_delete2_ph_en">""</string>
-    <string name="word_delete2_means">删除；向左或右滑动单词卡片</string>
+    <string name="word_delete2_ph_am">"dɪ'lit"</string>
+    <string name="word_delete2_ph_en">"dɪ'liːt"</string>
+    <string name="word_delete2_means">v.\n删去；删除\nv.\n向左或右滑动单词卡片进行删除</string>
 
     <string name="word_delete_name">delete</string>
-    <string name="word_delete_ph_am">""</string>
-    <string name="word_delete_ph_en">""</string>
-    <string name="word_delete_means">删除；长按单词卡片，然后按右上角“删除”</string>
+    <string name="word_delete_ph_am">"dɪ'lit"</string>
+    <string name="word_delete_ph_en">"dɪ'lit"</string>
+    <string name="word_delete_means">v.\n删去；删除\nv.\n长按单词卡片，然后按右上角“删除”进行删除</string>
+
+    <string name="msg_not_support_other_language">抱歉，单词忍者暂时无法窃取英文以外的情报</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

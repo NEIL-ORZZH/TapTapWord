@@ -55,6 +55,12 @@ public class ClipboardService extends Service {
                         if (cb.getPrimaryClip().getItemAt(i).getText() != null && cb.getPrimaryClip().getItemAt(i).getText().length() > 0) {
                             if (!cb.getPrimaryClip().getItemAt(i).getText().toString().trim().isEmpty()) {
                                 String clipboardItem = cb.getPrimaryClip().getItemAt(i).getText().toString().trim();
+
+                                if (!isEnglishWord(clipboardItem)) {
+                                    showToast(getString(R.string.msg_not_support_other_language));
+                                    break;
+                                }
+
                                 Intent intent = new Intent();
                                 intent.setClassName("com.example.changfeng.taptapword", "com.example.changfeng.taptapword.ResultActivity");
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -80,6 +86,16 @@ public class ClipboardService extends Service {
         }catch(Exception e){
             Toast.makeText(this, "没有安装", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private Boolean isEnglishWord(String word) {
+        char[] array = word.toCharArray();
+        for (char a : array) {
+            if ((char) (byte) a != a) {
+                return false;
+            }
+        }
+        return true;
     }
 
     void showToast(String info) {

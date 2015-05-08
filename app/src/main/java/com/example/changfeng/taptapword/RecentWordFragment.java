@@ -43,7 +43,7 @@ public class RecentWordFragment extends Fragment {
     public void onPause() {
         super.onPause();
         WordLab.get(getActivity()).saveWords();
-        Log.d(TAG, getActivity().getFileStreamPath(WordLab.FILENAME).getAbsolutePath());
+//        Log.d(TAG, getActivity().getFileStreamPath(WordLab.FILENAME).getAbsolutePath());
     }
 
 
@@ -122,7 +122,7 @@ public class RecentWordFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "OnActivityResult() called" + " requestCode:" + requestCode + " resultCode:" + resultCode);
+//        Log.d(TAG, "OnActivityResult() called" + " requestCode:" + requestCode + " resultCode:" + resultCode);
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -143,7 +143,7 @@ public class RecentWordFragment extends Fragment {
                 updateRecentWords();
 
                 showToast(getString(R.string.message_edit_success), Toast.LENGTH_SHORT);
-                Log.d(TAG, word.getName() + " " + word.getAmPhone() + " " + word.getEnPhone() + " " + word.getMeans());
+//                Log.d(TAG, word.getName() + " " + word.getAmPhone() + " " + word.getEnPhone() + " " + word.getMeans());
             }
         }
 
@@ -176,13 +176,13 @@ public class RecentWordFragment extends Fragment {
                 case R.id.action_delete:
                     deleteWords(selectedItemPositions);
                     showToast(getString(R.string.message_delete_success), Toast.LENGTH_SHORT);
-                    Log.d(TAG, "delete words:" + selectedItemPositions);
+//                    Log.d(TAG, "delete words:" + selectedItemPositions);
                     mode.finish();
                     break;
                 case R.id.action_archive:
                     archiveWords(selectedItemPositions);
                     showToast(getString(R.string.message_archive_success), Toast.LENGTH_SHORT);
-                    Log.d(TAG, "archived words Positions:" + selectedItemPositions);
+//                    Log.d(TAG, "archived words Positions:" + selectedItemPositions);
                     mode.finish();
                     break;
                 case R.id.action_select_all:
@@ -198,7 +198,7 @@ public class RecentWordFragment extends Fragment {
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            Log.d(TAG, "onDestroyActionMode() called");
+//            Log.d(TAG, "onDestroyActionMode() called");
             updateRecentWords();
             updateListView(Color.WHITE);
             isActionMode = false;
@@ -291,7 +291,7 @@ public class RecentWordFragment extends Fragment {
     }
 
     private void deleteWords(ArrayList<Integer> positions) {
-        Log.d(TAG,"deleteWords() called positions:" + positions);
+//        Log.d(TAG,"deleteWords() called positions:" + positions);
         if (positions.isEmpty()) {
             return;
         }

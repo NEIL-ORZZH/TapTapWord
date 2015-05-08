@@ -31,7 +31,7 @@ public class FileListActivity extends Activity implements AdapterView.OnItemClic
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        Log.d(TAG, "onCreate() called");
+//        Log.d(TAG, "onCreate() called");
         setContentView(R.layout.activity_file_list);
 
 
@@ -58,7 +58,7 @@ public class FileListActivity extends Activity implements AdapterView.OnItemClic
         Intent intent = new Intent();
         intent.putExtra(FILE_KEY_WORD, fileInfo.filePath);
         setResult(Activity.RESULT_OK, intent);
-        Log.d(TAG, "onItemClick() called filepath:" + fileInfo.filePath);
+//        Log.d(TAG, "onItemClick() called filepath:" + fileInfo.filePath);
     }
 
     private ArrayList<FileInfo> getFileList(String fileKeyWord) {

@@ -63,7 +63,7 @@ public class WordsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "OnCreateView() called");
+//        Log.d(TAG, "OnCreateView() called");
         View view = inflater.inflate(R.layout.fragment_words, container, false);
         materialListView = (MaterialListView) view.findViewById(R.id.material_listview);
         deletePromptLayout = (LinearLayout) view.findViewById(R.id.delete_prompt_layout);
@@ -169,7 +169,7 @@ public class WordsFragment extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            Log.d(TAG, "OnDestroyActionMode() called");
+//            Log.d(TAG, "OnDestroyActionMode() called");
             updateArchivedWords();
             updateListView();
             isActionMode = false;
@@ -179,7 +179,7 @@ public class WordsFragment extends Fragment {
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "OnActivityResult() called" + " requestCode:" + requestCode + " resultCode:" + resultCode);
+//        Log.d(TAG, "OnActivityResult() called" + " requestCode:" + requestCode + " resultCode:" + resultCode);
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -200,7 +200,7 @@ public class WordsFragment extends Fragment {
                 updateArchivedWords();
                 updateListView();
 
-                Log.d(TAG, word.getName() + " " + word.getAmPhone() + " " + word.getEnPhone() + " " + word.getMeans());
+//                Log.d(TAG, word.getName() + " " + word.getAmPhone() + " " + word.getEnPhone() + " " + word.getMeans());
             }
         }
 

@@ -81,19 +81,6 @@
 
         <meta-data android:name="splashAnim" android:value="true"/>
 
-        <!-- 有米渠道号(可选配置) 渠道号不能带空格，类型为整数 -->
-
-
-        <meta-data android:name="YOUMI_CHANNEL" android:value="0"> </meta-data>
-        <meta-data android:name="mmarket" android:value="10130"> </meta-data>
-        <meta-data android:name="eoemarket" android:value="10120"></meta-data>
-        <meta-data android:name="mumayi" android:value="10070"></meta-data>
-        <meta-data android:name="nduoa" android:value="10060"></meta-data>
-        <meta-data android:name="owan" android:value="10050"></meta-data>
-        <meta-data android:name="gfan" android:value="10020"></meta-data>
-        <meta-data android:name="crossmo" android:value="10300"></meta-data>
-
-
     </application>
 
 </manifest>

@@ -35,7 +35,7 @@ public class MyFile {
             File newFile = new File(sdDir);
             if (!newFile.exists()) {
                 newFile.mkdir();
-                Log.d(TAG, "createFile() called() "+ newFile.getAbsolutePath());
+//                Log.d(TAG, "createFile() called() "+ newFile.getAbsolutePath());
                 return true;
             }
         }
@@ -49,7 +49,7 @@ public class MyFile {
                 file.createNewFile();
             } catch (Exception e) {
                 // TODO: handle exception
-                Log.e(TAG, "createFile() called " + file.getAbsolutePath(), e);
+//                Log.e(TAG, "createFile() called " + file.getAbsolutePath(), e);
             }
         }
         return false;
@@ -63,7 +63,7 @@ public class MyFile {
 
             return new File(backDir.getPath() + File.separator + "TapTapWord_" + timeStamp + ".json");
         } else {
-            Log.d(TAG, "getOutputBackupFile() called error");
+//            Log.d(TAG, "getOutputBackupFile() called error");
             return null;
         }
     }
@@ -84,7 +84,7 @@ public class MyFile {
                     System.out.println(byteSum);
                     raf.seek(dstPath.length());
                     raf.write(buffer);
-                    Log.d(TAG, "copy :" + byteRead + "bytes");
+//                    Log.d(TAG, "copy :" + byteRead + "bytes");
                 }
                 inStream.close();
                 raf.close();
@@ -92,7 +92,7 @@ public class MyFile {
             return true;
         }
         catch (Exception e) {
-            Log.e(TAG, "copyFile() failed", e);
+//            Log.e(TAG, "copyFile() failed", e);
             e.printStackTrace();
             return false;
         }

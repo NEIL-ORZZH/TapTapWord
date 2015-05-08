@@ -140,7 +140,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult() called resultCode :" + requestCode + " requestCode :" + requestCode);
+//        Log.d(TAG, "onActivityResult() called resultCode :" + requestCode + " requestCode :" + requestCode);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_BACKUP_FILE:

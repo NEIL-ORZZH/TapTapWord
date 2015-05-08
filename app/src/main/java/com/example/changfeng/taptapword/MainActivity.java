@@ -42,7 +42,6 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG = "MainActivity";
     private static final String FRAGMENT_TAG = "CURRENT_FRAGMENT";
     public static final String SELECTED_COLOR = "#4caf50";
-    public static final String SEPERATIOR_COLOR = "#1bbc9b";
     public static final String WORD_TEXT_COLOR = "#293835";
 
     private DrawerLayout drawerLayout;
@@ -217,7 +216,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult() called resultCode :" + requestCode + " requestCode :" + requestCode);
+ //       Log.d(TAG, "onActivityResult() called resultCode :" + requestCode + " requestCode :" + requestCode);
     }
 
 

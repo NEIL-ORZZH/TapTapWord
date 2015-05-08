@@ -29,7 +29,7 @@ public class WordLab {
      * @return Value for property 'mWords'.
      */
     public ArrayList<Word> getWords() {
-        Log.d(TAG, "getWords() called");
+//        Log.d(TAG, "getWords() called");
         return mWords;
     }
 
@@ -49,10 +49,10 @@ public class WordLab {
     public boolean saveWords() {
         try {
             mSerializer.saveWords(mWords);
-            Log.d(TAG, "words saved to file");
+//            Log.d(TAG, "words saved to file");
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error saving words: ", e);
+//            Log.e(TAG, "Error saving words: ", e);
             return false;
         }
     }
@@ -62,18 +62,18 @@ public class WordLab {
             mSerializer.backupWords(externFile, mWords);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error backup words:", e);
+//            Log.e(TAG, "Error backup words:", e);
             return false;
         }
     }
 
     public boolean restoreWords(File externFile) {
-        Log.d(TAG, "WordLab() called");
+//        Log.d(TAG, "WordLab() called");
         try {
             mWords = mSerializer.restoreWords(externFile);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error loading words: ", e);
+//            Log.e(TAG, "Error loading words: ", e);
             return false;
         }
     }
@@ -91,7 +91,7 @@ public class WordLab {
 
 
     private WordLab(Context context) {
-        Log.d(TAG, "WordLab() called");
+//        Log.d(TAG, "WordLab() called");
         mAppContext = context;
         mSerializer = new WordJsonSerializer(mAppContext, FILENAME);
 
@@ -99,12 +99,12 @@ public class WordLab {
             mWords = mSerializer.loadWords();
         } catch (Exception e) {
             mWords = new ArrayList<>();
-            Log.e(TAG, "Error loading words: ", e);
+//            Log.e(TAG, "Error loading words: ", e);
         }
     }
 
     public static WordLab get(Context context) {
-        Log.d(TAG, "get() called");
+//        Log.d(TAG, "get() called");
         if (sWordLab == null) {
             sWordLab = new WordLab(context.getApplicationContext());
         }

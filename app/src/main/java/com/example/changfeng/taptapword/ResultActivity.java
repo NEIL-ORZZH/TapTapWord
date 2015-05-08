@@ -25,7 +25,6 @@ import java.util.ArrayList;
 public class ResultActivity extends Activity {
 
     private static final String TAG = "ResultActivity";
-    private static int count = 0;
     private static final int TRANSLATE_RESULT = 1;
     private static String result = "";
     private static final String NO_RESULT = "无法找到结果！";
@@ -54,7 +53,6 @@ public class ResultActivity extends Activity {
         result = "";
         state = STATE_ORIGIN;
         sendRequestWithHttpClient(clip, "en", "zh");
-        count++;
 //        showToast(TAG + " onCreate() " + count + " times.");
     }
 
@@ -70,7 +68,7 @@ public class ResultActivity extends Activity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case TRANSLATE_RESULT:
-                    Log.d(TAG,"handleMessage() " + result + clip);
+//                    Log.d(TAG,"handleMessage() " + result + clip);
                     if (state == STATE_ORIGIN) {
                         if (result.isEmpty()) {
                             state = STATE_LOWERCASE;
@@ -114,7 +112,7 @@ public class ResultActivity extends Activity {
                     if (httpResponse.getStatusLine().getStatusCode() == 200) {
                         HttpEntity entity = httpResponse.getEntity();
                         String response = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, response);
+//                        Log.d(TAG, response);
                         parseJsonWithJsonObject(response);
                     }
 
@@ -136,7 +134,7 @@ public class ResultActivity extends Activity {
             if (jsonObject.getInt("errNum") == 0 && jsonObject.getString("errMsg").equals("success")) {
                 jsonObject = jsonObject.getJSONObject("retData");
                 if (jsonObject.has("dict_result")) {
-                    Log.d(TAG, "dict_result " + jsonObject.getString("dict_result"));
+//                    Log.d(TAG, "dict_result " + jsonObject.getString("dict_result"));
                     if (!jsonObject.getString("dict_result").equals("[]")){
                         jsonObject = jsonObject.getJSONObject("dict_result");
                         word_name = jsonObject.getString("word_name");
@@ -156,8 +154,8 @@ public class ResultActivity extends Activity {
                             result += "\n\n";
                         }
 
-                        Log.d(TAG, ph_am);
-                        Log.d(TAG, ph_en);
+//                        Log.d(TAG, ph_am);
+//                        Log.d(TAG, ph_en);
 
                         jsonArray = jsonObject.getJSONArray("parts");
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -167,7 +165,7 @@ public class ResultActivity extends Activity {
                             word_means.append(part);
                             word_means.append("\n");
 
-                            Log.d(TAG, part);
+//                            Log.d(TAG, part);
                             JSONArray means;
                             means = jsonObject.getJSONArray("means");
                             for (int j = 0; j < means.length(); j++) {
@@ -175,7 +173,7 @@ public class ResultActivity extends Activity {
                                 result += mean + "；";
                                 word_means.append(mean);
                                 word_means.append("；");
-                                Log.d(TAG, mean);
+//                                Log.d(TAG, mean);
                             }
                             result += "\n";
                             word_means.append("\n");

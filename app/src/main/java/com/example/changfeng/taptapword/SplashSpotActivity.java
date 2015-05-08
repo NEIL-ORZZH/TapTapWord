@@ -10,11 +10,14 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import net.youmi.android.AdManager;
+import net.youmi.android.onlineconfig.OnlineConfigCallBack;
 import net.youmi.android.spot.SplashView;
 import net.youmi.android.spot.SpotDialogListener;
 import net.youmi.android.spot.SpotManager;
 
 public class SplashSpotActivity extends Activity {
+
+	private Boolean isAdCanShow;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +26,12 @@ public class SplashSpotActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+		// 设置是否开启有米广告SDK Log。默认值为true，标识开启， false为关闭log
+		AdManager.getInstance(this).setEnableDebugLog(false);
 
 		// 初始化接口，应用启动的时候调用
 		// 参数：appId, appSecret, 调试模式
-		AdManager.getInstance(this).init("84ecedc35bdc1c76", "6232f690fa36f36a", true);
+		AdManager.getInstance(this).init("84ecedc35bdc1c76", "6232f690fa36f36a", false);
 
 		// 如果仅仅使用开屏，需要取消注释以下注释，如果使用了开屏和插屏，则不需要。
 		SpotManager.getInstance(this).loadSplashSpotAds();
@@ -45,17 +50,17 @@ public class SplashSpotActivity extends Activity {
 
 					@Override
 					public void onShowSuccess() {
-						Log.i("YoumiAdDemo", "开屏展示成功");
+//						Log.i("YoumiAdDemo", "开屏展示成功");
 					}
 
 					@Override
 					public void onShowFailed() {
-						Log.i("YoumiAdDemo", "开屏展示失败。");
+//						Log.i("YoumiAdDemo", "开屏展示失败。");
 					}
 
 					@Override
 					public void onSpotClosed() {
-						Log.i("YoumiAdDemo", "开屏关闭。");
+//						Log.i("YoumiAdDemo", "开屏关闭。");
 					}
 				});
 

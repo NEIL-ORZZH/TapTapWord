@@ -43,7 +43,6 @@ public class AboutFragment extends Fragment {
     public String getVersion() {
         try {
             PackageInfo pi = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(),0);
-            Log.d(TAG, pi.packageName + " " + pi.versionName + " " + pi.versionCode);
             return getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(),0).versionName;
         } catch (Exception e) {
             e.printStackTrace();

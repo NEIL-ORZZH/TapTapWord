@@ -51,7 +51,7 @@ public class ClipboardService extends Service {
                 if (cb.hasPrimaryClip()) {
                     for (int i = 0; i < cb.getPrimaryClip().getItemCount(); i++) {
 
-                        Log.d(TAG, "onPrimaryClipChanged() " + cb.getPrimaryClip().getItemAt(i).getText());
+//                        Log.d(TAG, "onPrimaryClipChanged() " + cb.getPrimaryClip().getItemAt(i).getText());
                         if (cb.getPrimaryClip().getItemAt(i).getText() != null && cb.getPrimaryClip().getItemAt(i).getText().length() > 0) {
                             if (!cb.getPrimaryClip().getItemAt(i).getText().toString().trim().isEmpty()) {
                                 String clipboardItem = cb.getPrimaryClip().getItemAt(i).getText().toString().trim();

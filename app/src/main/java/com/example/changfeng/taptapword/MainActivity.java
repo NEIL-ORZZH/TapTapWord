@@ -285,7 +285,7 @@ public class MainActivity extends ActionBarActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
-        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + " " + getString(R.string.uri_download_wandoujia));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(Intent.createChooser(intent, "分享给你的亲友们"));
     }

@@ -116,6 +116,9 @@
 
     <string name="msg_not_support_other_language">抱歉，单词忍者暂时无法窃取英文以外的情报</string>
 
+    <string name="uri_download_wandoujia">http://www.wandoujia.com/apps/com.example.changfeng.taptapword</string>
+
+
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_word">WordActivity</string>

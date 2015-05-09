@@ -18,8 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.gc.materialdesign.widgets.Dialog;
 
 import java.util.Arrays;
 import java.util.List;

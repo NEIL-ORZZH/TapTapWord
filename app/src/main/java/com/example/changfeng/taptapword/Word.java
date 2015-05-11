@@ -9,22 +9,38 @@ import java.util.UUID;
  * Created by changfeng on 2015/4/19.
  */
 public class Word {
-    private UUID mId;
+    private UUID mUuid;
+    private long mId;
+    private String mLanguage;
     private String mName;
     private String mEnPhone;
     private String mAmPhone;
     private String mMeans;
     private boolean mArchived = false;
 
-    private static final String JSON_ID = "id";
+    private int mYear;
+    private int mMonth;
+    private int mDate;
+    private int mHour;
+    private int mMinute;
+    private int mSecond;
+
+    private static final String JSON_UUID = "uuid";
+    private static final String JSONG_LANGUAGE = "language";
     private static final String JSON_NAME = "name";
     private static final String JSON_EN_PHONE = "en_phone";
     private static final String JSON_AM_PHONE = "am_phone";
     private static final String JSON_MEANS = "means";
     private static final String JSON_ARCHIVED = "archived";
+    private static final String JSON_YEAR = "year";
+    private static final String JSON_MONTH = "month";
+    private static final String JSON_DATE = "date";
+    private static final String JSON_HOUR = "hour";
+    private static final String JSON_MINUTE = "minute";
+    private static final String JSON_SECOND = "second";
 
     public Word(JSONObject jsonObject) throws JSONException {
-        mId = UUID.fromString(jsonObject.getString(JSON_ID));
+        mUuid = UUID.fromString(jsonObject.getString(JSON_UUID));
         mName = jsonObject.getString(JSON_NAME);
         if (jsonObject.has(JSON_EN_PHONE)) {
             mEnPhone = jsonObject.getString(JSON_EN_PHONE);
@@ -45,7 +61,7 @@ public class Word {
 
     public JSONObject toJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(JSON_ID, mId.toString());
+        jsonObject.put(JSON_UUID, mUuid.toString());
         jsonObject.put(JSON_NAME, mName);
         jsonObject.put(JSON_EN_PHONE, mEnPhone);
         jsonObject.put(JSON_AM_PHONE, mAmPhone);
@@ -54,8 +70,25 @@ public class Word {
         return jsonObject;
     }
 
-    public UUID getId() {
+    public UUID getUUID() {
+        return mUuid;
+    }
+
+    public void setId(long id) {
+        mId = id;
+    }
+
+    public long getId() {
         return mId;
+    }
+
+
+    public void setLanguage(String language) {
+        mLanguage = language;
+    }
+
+    public String getLanguage() {
+        return mLanguage;
     }
 
     /**
@@ -141,8 +174,56 @@ public class Word {
         return mArchived;
     }
 
+    public void setYear(int year) {
+        mYear = year;
+    }
+
+    public int getYear() {
+        return mYear;
+    }
+
+    public void setMonth(int month) {
+        mMonth = month;
+    }
+
+    public int getMonth() {
+        return mMonth;
+    }
+
+    public void setDate(int date) {
+        mDate = date;
+    }
+
+    public int getDate() {
+        return mDate;
+    }
+
+    public void setHour(int hour) {
+        mHour = hour;
+    }
+
+    public int getHour() {
+        return mHour;
+    }
+
+    public void setMinute(int minute) {
+        mMinute = minute;
+    }
+
+    public int getMinute() {
+        return mMinute;
+    }
+
+    public void setSecond(int second) {
+        mSecond =second;
+    }
+
+    public int getSecond() {
+        return mSecond;
+    }
+
     public Word() {
-        mId = UUID.randomUUID();
+        mUuid = UUID.randomUUID();
     }
 
     public boolean hasEnPhone() {

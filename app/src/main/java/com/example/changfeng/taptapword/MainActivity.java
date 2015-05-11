@@ -77,7 +77,8 @@ public class MainActivity extends ActionBarActivity {
                 new DrawerItem(DrawerItem.Type.DIVIDER),
                 new DrawerMenu().setIconRes(R.drawable.abc_ic_menu_share_mtrl_alpha).setText(getString(R.string.menu_share)),
                 new DrawerMenu().setIconRes(R.drawable.ic_contact).setText(getString(R.string.menu_contact_us)),
-                new DrawerMenu().setIconRes(R.drawable.ic_about).setText(getString(R.string.menu_about)));
+                new DrawerMenu().setIconRes(R.drawable.ic_about).setText(getString(R.string.menu_about)),
+                new DrawerMenu().setIconRes(R.drawable.ic_about).setText("test"));
         drawerOptions.setLayoutManager(new LinearLayoutManager(this));
         final DrawerItemAdapter adapter = new DrawerItemAdapter(drawerItems);
         adapter.setOnItemClickListener(new DrawerItemAdapter.OnItemClickListener() {
@@ -131,6 +132,9 @@ public class MainActivity extends ActionBarActivity {
                     case 12:
                         setupFragment(new AboutFragment());
                         setTitle(getString(R.string.menu_about));
+                        break;
+                    case 13:
+                        setupFragment(new TestFragment());
                         break;
                     default:
                         break;
@@ -200,11 +204,31 @@ public class MainActivity extends ActionBarActivity {
             WordLab.get(getApplicationContext()).addWord(delete2Word);
 
             WordLab.get(getApplicationContext()).saveWords();
+
+
         } else {
             setupFragment(new RecentWordFragment());
         }
 
         startClipboardService();
+
+        for (int i = 0; i < 100; i++) {
+            Word word = new Word();
+            word.setLanguage("English");
+            word.setName("chang");
+            word.setAmPhone("am");
+            word.setEnPhone("en");
+            word.setArchived(false);
+            word.setYear(2015);
+            word.setMonth(5);
+            word.setDate(10);
+            word.setHour(18);
+            word.setMonth(14);
+            word.setMinute(22);
+            word.setSecond(i);
+            WordManger.get(getApplicationContext()).insertWord(word);
+        }
+
 
     }
 
@@ -283,6 +307,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void shareByIntent() {
         Intent intent = new Intent(Intent.ACTION_SEND);
+
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + " " + getString(R.string.uri_download_wandoujia));
@@ -291,7 +316,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void sendMailByIntent() {
-        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("application/octet-stream");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.mail_address)});
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject));

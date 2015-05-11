@@ -80,7 +80,7 @@ public class RecentWordFragment extends Fragment {
                         cardItemView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
                     }
                 } else {
-                    currentWordId = mRecentWords.get(i).getId();
+                    currentWordId = mRecentWords.get(i).getUUID();
                     Intent intent = new Intent(getActivity(), WordActivity.class);
                     intent.putExtra(WordActivity.EXTRA_WORD_NAME, mRecentWords.get(i).getName());
                     intent.putExtra(WordActivity.EXTRA_WORD_PHONE, mRecentWords.get(i).getFormatPhones());
@@ -262,7 +262,7 @@ public class RecentWordFragment extends Fragment {
 
     private Word getWord(UUID uuid){
         for (Word word : mWords) {
-            if (word.getId().equals(uuid)) {
+            if (word.getUUID().equals(uuid)) {
                 return word;
             }
         }
@@ -271,7 +271,7 @@ public class RecentWordFragment extends Fragment {
 
     private void archiveWord(int position) {
         if (!mRecentWords.isEmpty()) {
-            getWord(mRecentWords.get(position).getId()).setArchived(true);
+            getWord(mRecentWords.get(position).getUUID()).setArchived(true);
         }
     }
 

@@ -19,7 +19,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 
 public class ResultActivity extends Activity {
@@ -192,14 +197,28 @@ public class ResultActivity extends Activity {
     }
 
     private void saveWord() {
+
         Word word = new Word();
+
+        word.setLanguage("English");
+
         word.setName(word_name);
         word.setEnPhone(ph_en);
         word.setAmPhone(ph_am);
         word.setMeans(word_means.toString());
+        word.setArchived(false);
 
+        Calendar c = Calendar.getInstance();
+        word.setYear(c.get(Calendar.YEAR));
+        word.setMonth(c.get(Calendar.MONTH) + 1);
+        word.setDate(c.get(Calendar.DAY_OF_MONTH));
+        word.setHour(c.get(Calendar.HOUR_OF_DAY));
+        word.setMinute(c.get(Calendar.MINUTE));
+        word.setSecond(c.get(Calendar.SECOND));
         WordLab.get(getApplicationContext()).addWord(word);
         WordLab.get(getApplicationContext()).saveWords();
+
+        WordManger.get(getApplicationContext()).insertWord(word);
 
     }
     void showToast(String info) {

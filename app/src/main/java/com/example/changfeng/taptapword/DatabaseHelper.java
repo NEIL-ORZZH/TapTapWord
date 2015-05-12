@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by changfeng on 2015/5/10.
  */
@@ -69,6 +72,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public long insertWord (Word word) {
+        return getWritableDatabase().insert(TABLE_WORD, null, getContentValues(word));
+    }
+
+    private ContentValues getContentValues(Word word) {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_LANGUAGE, word.getLanguage());
         cv.put(COLUMN_NAME, word.getName());
@@ -82,13 +89,70 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_HOUR, word.getHour());
         cv.put(COLUMN_MINUTE, word.getMinute());
         cv.put(COLUMN_SECOND, word.getSecond());
-        return getWritableDatabase().insert(TABLE_WORD, null, cv);
+
+        return cv;
     }
 
     public WordCursor queryWords() {
-        Cursor wrapped = getReadableDatabase().query(TABLE_WORD, null, null,null,null,null, null);
+        Cursor wrapped = getReadableDatabase().query(TABLE_WORD, null, null,null,null,null, "desc");
         Log.d(TAG, wrapped.getColumnCount() + " " + wrapped.getColumnNames());
         return new WordCursor(wrapped);
+    }
+
+
+    private ArrayList<Word> getWords(Cursor cursor) {
+        ArrayList<Word> words = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                Word word = new Word();
+                word.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_WORD_ID)));
+                word.setLanguage(cursor.getString(cursor.getColumnIndex(COLUMN_LANGUAGE)));
+                word.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                word.setAmPhone(cursor.getString(cursor.getColumnIndex(COLUMN_PH_AM)));
+                word.setEnPhone(cursor.getString(cursor.getColumnIndex(COLUMN_PH_EN)));
+                word.setMeans(cursor.getString(cursor.getColumnIndex(COLUMN_MEANS)));
+                if (cursor.getInt(cursor.getColumnIndex(COLUMN_ARCHIVE)) == 1) {
+                    word.setArchived(true);
+                } else {
+                    word.setArchived(false);
+                }
+                word.setYear(cursor.getInt(cursor.getColumnIndex(COLUMN_YEAR)));
+                word.setMonth(cursor.getInt(cursor.getColumnIndex(COLUMN_MONTH)));
+                word.setDate(cursor.getInt(cursor.getColumnIndex(COLUMN_DATE)));
+                word.setHour(cursor.getInt(cursor.getColumnIndex(COLUMN_HOUR)));
+                word.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_MINUTE)));
+                word.setSecond(cursor.getInt(cursor.getColumnIndex(COLUMN_SECOND)));
+                words.add(word);
+            } while (cursor.moveToNext());
+        }
+        return words;
+    }
+
+    public ArrayList<Word> loadUnarchivedWords() {
+        Cursor cursor = getReadableDatabase().query(TABLE_WORD, null, "archive=?", new String[] {"0"},null,null, null);
+        return getWords(cursor);
+    }
+
+    public ArrayList<Word> loadArchivedWords() {
+        Cursor cursor = getReadableDatabase().query(TABLE_WORD, null, "archive=?", new String[] {"1"},null,null, null);
+        return getWords(cursor);
+    }
+
+    public ArrayList<Word> loadWords() {
+        Cursor cursor = getReadableDatabase().query(TABLE_WORD, null, null,null,null,null, null);
+        return getWords(cursor);
+    }
+
+    public void updateWord(Word word) {
+        getWritableDatabase().update(TABLE_WORD, getContentValues(word), COLUMN_WORD_ID + " = ?", new String[]{String.valueOf(word.getId())});
+    }
+
+    public void deleteWord(Word word) {
+        getWritableDatabase().delete(TABLE_WORD, COLUMN_WORD_ID + " = ?", new String[] {String.valueOf(word.getId())});
+    }
+
+    public void replaceWord(Word word) {
+        getWritableDatabase().replace(TABLE_WORD, "_id", getContentValues(word));
     }
 
     public static class WordCursor extends CursorWrapper{

@@ -30,6 +30,7 @@ import com.dexafree.materialList.model.CardItemView;
 import com.dexafree.materialList.view.MaterialListView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -43,11 +44,11 @@ public class WordsFragment extends Fragment {
     private static final int REQUEST_WORD = 2;
 
     private MaterialListView materialListView;
-    private LinearLayout deletePromptLayout;
     private ArrayList<Word> mWords;
     private ArrayList<Word> mArchivedWords;
+    private Word currentWord;
 
-    private UUID currentWordId;
+    private long currentWordId;
 
     private boolean isActionMode = false;
     private ArrayList<Integer> selectedItemPositions = new ArrayList<>();
@@ -63,13 +64,11 @@ public class WordsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        Log.d(TAG, "OnCreateView() called");
+        Log.d(TAG, "OnCreateView() called");
         View view = inflater.inflate(R.layout.fragment_words, container, false);
         materialListView = (MaterialListView) view.findViewById(R.id.material_listview);
-        deletePromptLayout = (LinearLayout) view.findViewById(R.id.delete_prompt_layout);
 
-        mWords = WordLab.get(getActivity()).getWords();
-        updateArchivedWords();
+        mArchivedWords = WordManger.get(getActivity()).getArchivedWords();
 
         updateListView();
 
@@ -92,11 +91,13 @@ public class WordsFragment extends Fragment {
                     }
                 } else {
                     currentWordId = mArchivedWords.get(i).getId();
+
+                    currentWord = mArchivedWords.get(i);
                     Intent intent = new Intent(getActivity(), WordActivity.class);
-                    intent.putExtra(WordActivity.EXTRA_WORD_NAME, mArchivedWords.get(i).getName());
-                    intent.putExtra(WordActivity.EXTRA_WORD_PHONE, mArchivedWords.get(i).getFormatPhones());
-                    intent.putExtra(WordActivity.EXTRA_WORD_MEANS, mArchivedWords.get(i).getMeans());
-                    intent.putExtra(WordActivity.EXTRA_WORD_ARCHIVED, mArchivedWords.get(i).isArchived());
+                    intent.putExtra(WordActivity.EXTRA_WORD_NAME, currentWord.getName());
+                    intent.putExtra(WordActivity.EXTRA_WORD_PHONE, currentWord.getFormatPhones());
+                    intent.putExtra(WordActivity.EXTRA_WORD_MEANS, currentWord.getMeans());
+                    intent.putExtra(WordActivity.EXTRA_WORD_ARCHIVED, currentWord.isArchived());
                     startActivityForResult(intent, REQUEST_WORD);
                 }
             }
@@ -118,17 +119,24 @@ public class WordsFragment extends Fragment {
         materialListView.setOnDismissCallback(new OnDismissCallback() {
             @Override
             public void onDismiss(Card card, int position) {
-                if (!mWords.isEmpty()) {
-                    mWords.remove(mArchivedWords.get(position));
+
+                if (!mArchivedWords.isEmpty()) {
+                    WordManger.get(getActivity()).deleteWord(mArchivedWords.get(position));
+                    mArchivedWords.remove(position);
                     showToast(getString(R.string.message_delete_success), Toast.LENGTH_SHORT);
                 }
-                updateArchivedWords();
                 updateListView();
             }
         });
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mArchivedWords = WordManger.get(getActivity()).getArchivedWords();
+        updateListView();
+    }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
@@ -185,23 +193,22 @@ public class WordsFragment extends Fragment {
         }
 
         if (requestCode == REQUEST_WORD) {
-            if (getWord(currentWordId) != null) {
-                Word word = getWord(currentWordId);
-                word.setName(data.getStringExtra(WordActivity.EXTRA_WORD_NAME));
-                word.setArchived(data.getBooleanExtra(WordActivity.EXTRA_WORD_ARCHIVED, false));
-                word.setMeans(data.getStringExtra(WordActivity.EXTRA_WORD_MEANS));
-                String phone = data.getStringExtra(WordActivity.EXTRA_WORD_PHONE).trim();
+            currentWord.setName(data.getStringExtra(WordActivity.EXTRA_WORD_NAME));
+            currentWord.setArchived(data.getBooleanExtra(WordActivity.EXTRA_WORD_ARCHIVED, false));
+            currentWord.setMeans(data.getStringExtra(WordActivity.EXTRA_WORD_MEANS));
+            String phone = data.getStringExtra(WordActivity.EXTRA_WORD_PHONE).trim();
 
-                String amPhone = phone.substring(phone.indexOf('[') + 1, phone.indexOf(']'));
-                String emPhone = phone.substring(phone.lastIndexOf('[') + 1, phone.lastIndexOf(']'));
-                word.setAmPhone(amPhone);
-                word.setEnPhone(emPhone);
+            String amPhone = phone.substring(phone.indexOf('[') + 1, phone.indexOf(']'));
+            String emPhone = phone.substring(phone.lastIndexOf('[') + 1, phone.lastIndexOf(']'));
+            currentWord.setAmPhone(amPhone);
+            currentWord.setEnPhone(emPhone);
 
-                updateArchivedWords();
-                updateListView();
-
-//                Log.d(TAG, word.getName() + " " + word.getAmPhone() + " " + word.getEnPhone() + " " + word.getMeans());
+            WordManger.get(getActivity()).updateWord(currentWord);
+            if (!currentWord.isArchived()) {
+                mArchivedWords.remove(currentWord);
             }
+
+            showToast(getString(R.string.message_edit_success), Toast.LENGTH_SHORT);
         }
 
     }
@@ -232,6 +239,7 @@ public class WordsFragment extends Fragment {
                     description.append(word.getFormatEnPhone());
                 }
                 description.append("\n\n");
+
                 if (!word.getMeans().isEmpty()) {
                     description.append(word.getMeans());
                 }
@@ -259,7 +267,7 @@ public class WordsFragment extends Fragment {
 
     private Word getWord(UUID uuid) {
         for (Word word : mWords) {
-            if (word.getId().equals(uuid)) {
+            if (word.getUUID().equals(uuid)) {
                 return word;
             }
         }
@@ -268,7 +276,7 @@ public class WordsFragment extends Fragment {
 
     private void unArchiveWord(int position) {
         if (!mArchivedWords.isEmpty()) {
-            getWord(mArchivedWords.get(position).getId()).setArchived(false);
+            getWord(mArchivedWords.get(position).getUUID()).setArchived(false);
         }
     }
 

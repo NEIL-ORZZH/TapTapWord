@@ -32,6 +32,8 @@ public class RecentWordFragment extends Fragment {
 
     private static final int REQUEST_WORD = 1;
     private UUID currentWordId;
+    private Word currentWord;
+    private ArrayList<Word> selectedWords;
     private ArrayList<Word> mWords;
     private ArrayList<Word> mRecentWords = new ArrayList<>();
     private boolean isActionMode = false;
@@ -40,16 +42,9 @@ public class RecentWordFragment extends Fragment {
     MaterialListView materialListView;
 
     @Override
-    public void onPause() {
-        super.onPause();
-        WordLab.get(getActivity()).saveWords();
-//        Log.d(TAG, getActivity().getFileStreamPath(WordLab.FILENAME).getAbsolutePath());
-    }
-
-
-    @Override
     public void onResume() {
         super.onResume();
+        mRecentWords = WordManger.get(getActivity()).getUnarchivedWords();
         updateListView(Color.WHITE);
     }
 
@@ -59,8 +54,8 @@ public class RecentWordFragment extends Fragment {
         View view = inflater.inflate(R.layout.material_list_view, container, false);
         materialListView = (MaterialListView) view.findViewById(R.id.material_listview);
 
-        mWords = WordLab.get(getActivity()).getWords();
-        updateRecentWords();
+//        mWords = WordLab.get(getActivity()).getWords();
+        mRecentWords = WordManger.get(getActivity()).getUnarchivedWords();
 
         materialListView.addOnItemTouchListener(new RecyclerItemClickListener.OnItemClickListener() {
 
@@ -72,20 +67,23 @@ public class RecentWordFragment extends Fragment {
                 }
 
                 if (isActionMode) {
-                    if (isSelected(i)) {
-                        selectedItemPositions.remove(i);
+
+                    if (selectedWords.contains(mRecentWords.get(i))) {
+                        selectedWords.remove(mRecentWords.get(i));
                         cardItemView.setBackgroundColor(Color.WHITE);
                     } else {
-                        selectedItemPositions.add(i);
+                        selectedWords.add(mRecentWords.get(i));
                         cardItemView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
                     }
                 } else {
                     currentWordId = mRecentWords.get(i).getUUID();
+
+                    currentWord = mRecentWords.get(i);
                     Intent intent = new Intent(getActivity(), WordActivity.class);
-                    intent.putExtra(WordActivity.EXTRA_WORD_NAME, mRecentWords.get(i).getName());
-                    intent.putExtra(WordActivity.EXTRA_WORD_PHONE, mRecentWords.get(i).getFormatPhones());
-                    intent.putExtra(WordActivity.EXTRA_WORD_MEANS, mRecentWords.get(i).getMeans());
-                    intent.putExtra(WordActivity.EXTRA_WORD_ARCHIVED, mRecentWords.get(i).isArchived());
+                    intent.putExtra(WordActivity.EXTRA_WORD_NAME, currentWord.getName());
+                    intent.putExtra(WordActivity.EXTRA_WORD_PHONE, currentWord.getFormatPhones());
+                    intent.putExtra(WordActivity.EXTRA_WORD_MEANS, currentWord.getMeans());
+                    intent.putExtra(WordActivity.EXTRA_WORD_ARCHIVED, currentWord.isArchived());
                     startActivityForResult(intent, REQUEST_WORD);
                 }
 
@@ -97,8 +95,9 @@ public class RecentWordFragment extends Fragment {
                     isActionMode = true;
                     getActivity().startActionMode(mActionModeCallback);
                     cardItemView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
+                    selectedWords = new ArrayList<>();
                     if (!mRecentWords.isEmpty()) {
-                        selectedItemPositions.add(i);
+                        selectedWords.add(mRecentWords.get(i));
                     }
                 }
             }
@@ -108,10 +107,11 @@ public class RecentWordFragment extends Fragment {
             @Override
             public void onDismiss(Card card, int position) {
                 if (!mRecentWords.isEmpty()) {
+                    mRecentWords.get(position).setArchived(true);
+                    WordManger.get(getActivity()).updateWord(mRecentWords.get(position));
+                    mRecentWords.remove(position);
                     showToast(getString(R.string.message_archive_success), Toast.LENGTH_SHORT);
                 }
-                archiveWord(position);
-                updateRecentWords();
                 updateListView(Color.WHITE);
 
             }
@@ -128,23 +128,24 @@ public class RecentWordFragment extends Fragment {
         }
 
         if (requestCode == REQUEST_WORD) {
-            if (getWord(currentWordId) != null) {
-                Word word = getWord(currentWordId);
-                word.setName(data.getStringExtra(WordActivity.EXTRA_WORD_NAME));
-                word.setArchived(data.getBooleanExtra(WordActivity.EXTRA_WORD_ARCHIVED, false));
-                word.setMeans(data.getStringExtra(WordActivity.EXTRA_WORD_MEANS));
-                String phone = data.getStringExtra(WordActivity.EXTRA_WORD_PHONE).trim();
 
-                String amPhone = phone.substring(phone.indexOf('[') + 1, phone.indexOf(']'));
-                String emPhone = phone.substring(phone.lastIndexOf('[') + 1, phone.lastIndexOf(']'));
-                word.setAmPhone(amPhone);
-                word.setEnPhone(emPhone);
 
-                updateRecentWords();
+            currentWord.setName(data.getStringExtra(WordActivity.EXTRA_WORD_NAME));
+            currentWord.setArchived(data.getBooleanExtra(WordActivity.EXTRA_WORD_ARCHIVED, false));
+            currentWord.setMeans(data.getStringExtra(WordActivity.EXTRA_WORD_MEANS));
+            String phone = data.getStringExtra(WordActivity.EXTRA_WORD_PHONE).trim();
 
-                showToast(getString(R.string.message_edit_success), Toast.LENGTH_SHORT);
-//                Log.d(TAG, word.getName() + " " + word.getAmPhone() + " " + word.getEnPhone() + " " + word.getMeans());
+            String amPhone = phone.substring(phone.indexOf('[') + 1, phone.indexOf(']'));
+            String emPhone = phone.substring(phone.lastIndexOf('[') + 1, phone.lastIndexOf(']'));
+            currentWord.setAmPhone(amPhone);
+            currentWord.setEnPhone(emPhone);
+
+            WordManger.get(getActivity()).updateWord(currentWord);
+            if (currentWord.isArchived()) {
+                mRecentWords.remove(currentWord);
             }
+            showToast(getString(R.string.message_edit_success), Toast.LENGTH_SHORT);
+//                Log.d(TAG, word.getName() + " " + word.getAmPhone() + " " + word.getEnPhone() + " " + word.getMeans());
         }
 
     }
@@ -174,15 +175,19 @@ public class RecentWordFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_delete:
-                    deleteWords(selectedItemPositions);
-                    showToast(getString(R.string.message_delete_success), Toast.LENGTH_SHORT);
+                    if (!selectedWords.isEmpty()) {
+                        deleteWords();
+                        showToast(getString(R.string.message_delete_success), Toast.LENGTH_SHORT);
 //                    Log.d(TAG, "delete words:" + selectedItemPositions);
-                    mode.finish();
+                        mode.finish();
+                    }
                     break;
                 case R.id.action_archive:
-                    archiveWords(selectedItemPositions);
-                    showToast(getString(R.string.message_archive_success), Toast.LENGTH_SHORT);
+                    if (!selectedWords.isEmpty()) {
+                        archiveWords();
+                        showToast(getString(R.string.message_archive_success), Toast.LENGTH_SHORT);
 //                    Log.d(TAG, "archived words Positions:" + selectedItemPositions);
+                    }
                     mode.finish();
                     break;
                 case R.id.action_select_all:
@@ -199,11 +204,8 @@ public class RecentWordFragment extends Fragment {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
 //            Log.d(TAG, "onDestroyActionMode() called");
-            updateRecentWords();
             updateListView(Color.WHITE);
             isActionMode = false;
-            selectedItemPositions = null;
-
         }
     };
 
@@ -275,12 +277,15 @@ public class RecentWordFragment extends Fragment {
         }
     }
 
-    private void archiveWords(ArrayList<Integer> positions) {
-        if (positions.isEmpty()) {
+    private void archiveWords() {
+        if (selectedWords.isEmpty()) {
             return;
         }
-        for (Integer position : positions) {
-            archiveWord(position);
+
+        for (Word word : selectedWords) {
+            word.setArchived(true);
+            WordManger.get(getActivity()).updateWord(word);
+            mRecentWords.remove(word);
         }
     }
 
@@ -290,21 +295,19 @@ public class RecentWordFragment extends Fragment {
         }
     }
 
-    private void deleteWords(ArrayList<Integer> positions) {
+    private void deleteWords() {
 //        Log.d(TAG,"deleteWords() called positions:" + positions);
-        if (positions.isEmpty()) {
+        if (selectedWords.isEmpty()) {
             return;
         }
-        for (Integer position : positions) {
-            deleteWord(position);
+        for (Word word : selectedWords) {
+            WordManger.get(getActivity()).deleteWord(word);
+            mRecentWords.remove(word);
         }
     }
 
     private void selectAll() {
-        selectedItemPositions.clear();
-        for (int i = 0; i < mRecentWords.size(); i++) {
-            selectedItemPositions.add(i);
-        }
+        selectedWords = mRecentWords;
     }
 
     private void checkAll() {

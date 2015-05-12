@@ -22,7 +22,8 @@ import java.util.List;
 public class FileListActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private static final String TAG = "FileListActivity";
-    public static final String FILE_KEY_WORD = "TapTapWord";
+    public static final String FILE_KEY_WORD = "word_ninja";
+
     List<FileInfo> fileInfoList;
 
     @Override
@@ -37,6 +38,9 @@ public class FileListActivity extends Activity implements AdapterView.OnItemClic
 
         Intent intent = getIntent();
         fileInfoList = getFileList(intent.getStringExtra(FILE_KEY_WORD));
+        if (fileInfoList.isEmpty()) {
+            fileInfoList.add(new FileInfo(getString(R.string.filename_no_backup_file_found), getString(R.string.filepath_no_backup_file_found)));
+        }
 
         final FileListAdapter adapter = new FileListAdapter(FileListActivity.this,
                 R.layout.file_list_item, fileInfoList);
@@ -50,7 +54,9 @@ public class FileListActivity extends Activity implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         FileInfo fileInfo = fileInfoList.get(position);
-        setResults(fileInfo);
+        if (!fileInfo.fileName.equals(getString(R.string.filename_no_backup_file_found))) {
+            setResults(fileInfo);
+        }
         finish();
     }
 

@@ -31,13 +31,10 @@ public class RecentWordFragment extends Fragment {
     private static final String TAG = "RecentWordFragment";
 
     private static final int REQUEST_WORD = 1;
-    private UUID currentWordId;
     private Word currentWord;
     private ArrayList<Word> selectedWords;
-    private ArrayList<Word> mWords;
     private ArrayList<Word> mRecentWords = new ArrayList<>();
     private boolean isActionMode = false;
-    private ArrayList<Integer> selectedItemPositions;
 
     MaterialListView materialListView;
 
@@ -76,8 +73,6 @@ public class RecentWordFragment extends Fragment {
                         cardItemView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
                     }
                 } else {
-                    currentWordId = mRecentWords.get(i).getUUID();
-
                     currentWord = mRecentWords.get(i);
                     Intent intent = new Intent(getActivity(), WordActivity.class);
                     intent.putExtra(WordActivity.EXTRA_WORD_NAME, currentWord.getName());
@@ -94,10 +89,10 @@ public class RecentWordFragment extends Fragment {
                 if (!isActionMode) {
                     isActionMode = true;
                     getActivity().startActionMode(mActionModeCallback);
-                    cardItemView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
                     selectedWords = new ArrayList<>();
                     if (!mRecentWords.isEmpty()) {
                         selectedWords.add(mRecentWords.get(i));
+                        cardItemView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
                     }
                 }
             }
@@ -157,7 +152,6 @@ public class RecentWordFragment extends Fragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
             isActionMode = true;
-            selectedItemPositions = new ArrayList<>();
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.context_recent_words_menu, menu);
             return true;
@@ -253,30 +247,6 @@ public class RecentWordFragment extends Fragment {
         materialListView.setBackgroundColor(Color.WHITE);
     }
 
-    private void updateRecentWords() {
-        mRecentWords = new ArrayList<>();
-        for (Word word : mWords) {
-            if (!word.isArchived()) {
-                mRecentWords.add(word);
-            }
-        }
-    }
-
-    private Word getWord(UUID uuid){
-        for (Word word : mWords) {
-            if (word.getUUID().equals(uuid)) {
-                return word;
-            }
-        }
-        return null;
-    }
-
-    private void archiveWord(int position) {
-        if (!mRecentWords.isEmpty()) {
-            getWord(mRecentWords.get(position).getUUID()).setArchived(true);
-        }
-    }
-
     private void archiveWords() {
         if (selectedWords.isEmpty()) {
             return;
@@ -285,14 +255,8 @@ public class RecentWordFragment extends Fragment {
         for (Word word : selectedWords) {
             word.setArchived(true);
             WordManger.get(getActivity()).updateWord(word);
-            mRecentWords.remove(word);
         }
-    }
-
-    private void deleteWord(int position) {
-        if (!mWords.isEmpty()) {
-            mWords.remove(mRecentWords.get(position));
-        }
+        mRecentWords.removeAll(selectedWords);
     }
 
     private void deleteWords() {
@@ -302,25 +266,23 @@ public class RecentWordFragment extends Fragment {
         }
         for (Word word : selectedWords) {
             WordManger.get(getActivity()).deleteWord(word);
-            mRecentWords.remove(word);
         }
+        mRecentWords.removeAll(selectedWords);
     }
 
     private void selectAll() {
+        if (mRecentWords.isEmpty()) {
+            return;
+        }
         selectedWords = mRecentWords;
     }
 
     private void checkAll() {
+        if (mRecentWords.isEmpty()) {
+            return;
+        }
         materialListView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
 
-    }
-    private boolean isSelected(int position) {
-        for (int pos : selectedItemPositions) {
-            if (pos == position) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void showToast(String message, int duration) {

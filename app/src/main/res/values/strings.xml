@@ -39,9 +39,13 @@
     <string name="restore">恢复</string>
     <string name="message_restore_data">将恢复你的数据，现有的数据将被覆盖</string>
     <string name="message_data_restored">数据恢复成功！</string>
+    <string name="message_data_restored_failed">数据恢复失败</string>
     <string name="clear_backup_data">清除备份数据</string>
     <string name="message_clear_backup_data">将清除你的所有备份数据</string>
     <string name="message_all_backup_data_cleared">所有备份数据清除成功</string>
+
+    <string name="filename_no_backup_file_found">没有找到备份数据</string>
+    <string name="filepath_no_backup_file_found">""</string>
 
     <string name="share_subject">分享单词忍者</string>
     <string name="share_text">Hi，朋友们，我正在使用单词忍者！它可以在读文章或者网页的时候，选中需要翻译的单词之后复制，直接返回翻译结果！Enjoy it！</string>

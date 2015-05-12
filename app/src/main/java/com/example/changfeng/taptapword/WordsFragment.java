@@ -42,24 +42,18 @@ public class WordsFragment extends Fragment {
     private static final String TAG = "WordsFragment";
 
     private static final int REQUEST_WORD = 2;
+    private Word currentWord;
+    private ArrayList<Word> selectedWords;
+    private ArrayList<Word> mArchivedWords = new ArrayList<>();
+    private boolean isActionMode = false;
 
     private MaterialListView materialListView;
-    private ArrayList<Word> mWords;
-    private ArrayList<Word> mArchivedWords;
-    private Word currentWord;
-
-    private long currentWordId;
-
-    private boolean isActionMode = false;
-    private ArrayList<Integer> selectedItemPositions = new ArrayList<>();
-
-
-
-
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        mArchivedWords = WordManger.get(getActivity()).getArchivedWords();
+        updateListView();
     }
 
     @Override
@@ -70,9 +64,6 @@ public class WordsFragment extends Fragment {
 
         mArchivedWords = WordManger.get(getActivity()).getArchivedWords();
 
-        updateListView();
-
-
         materialListView.addOnItemTouchListener(new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(CardItemView cardItemView, int i) {
@@ -82,16 +73,14 @@ public class WordsFragment extends Fragment {
                 }
 
                 if (isActionMode) {
-                    if (isSelected(i)) {
-                        selectedItemPositions.remove(i);
+                    if (selectedWords.contains(mArchivedWords.get(i))) {
+                        selectedWords.remove(mArchivedWords.get(i));
                         cardItemView.setBackgroundColor(Color.WHITE);
                     } else {
-                        selectedItemPositions.add(i);
+                        selectedWords.add(mArchivedWords.get(i));
                         cardItemView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
                     }
                 } else {
-                    currentWordId = mArchivedWords.get(i).getId();
-
                     currentWord = mArchivedWords.get(i);
                     Intent intent = new Intent(getActivity(), WordActivity.class);
                     intent.putExtra(WordActivity.EXTRA_WORD_NAME, currentWord.getName());
@@ -107,10 +96,10 @@ public class WordsFragment extends Fragment {
                 if (!isActionMode) {
                     isActionMode = true;
                     getActivity().startActionMode(mActionModeCallback);
-                    cardItemView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
-                    selectedItemPositions.add(i);
+                    selectedWords = new ArrayList<>();
                     if (!mArchivedWords.isEmpty()) {
-                        selectedItemPositions.add(i);
+                        selectedWords.add(mArchivedWords.get(i));
+                        cardItemView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
                     }
                 }
             }
@@ -119,7 +108,6 @@ public class WordsFragment extends Fragment {
         materialListView.setOnDismissCallback(new OnDismissCallback() {
             @Override
             public void onDismiss(Card card, int position) {
-
                 if (!mArchivedWords.isEmpty()) {
                     WordManger.get(getActivity()).deleteWord(mArchivedWords.get(position));
                     mArchivedWords.remove(position);
@@ -131,18 +119,11 @@ public class WordsFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mArchivedWords = WordManger.get(getActivity()).getArchivedWords();
-        updateListView();
-    }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             isActionMode = true;
-            selectedItemPositions.clear();
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.context_words_menu, menu);
             return true;
@@ -157,18 +138,23 @@ public class WordsFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_delete:
-                    deleteWords(selectedItemPositions);
-                    showToast(getString(R.string.message_delete_success), Toast.LENGTH_SHORT);
+                    if (!selectedWords.isEmpty()) {
+                        deleteWords();
+                        showToast(getString(R.string.message_delete_success), Toast.LENGTH_SHORT);
+                    }
                     mode.finish();
                     break;
                 case R.id.action_unarchive:
-                    unArchiveWords(selectedItemPositions);
-                    showToast(getString(R.string.message_unarchive_success), Toast.LENGTH_SHORT);
+                    if (!selectedWords.isEmpty()) {
+                        unArchiveWords();
+                        showToast(getString(R.string.message_unarchive_success), Toast.LENGTH_SHORT);
+                    }
                     mode.finish();
                     break;
                 case R.id.action_select_all:
                     selectAll();
                     checkAll();
+                    break;
                 default:
                     return false;
             }
@@ -178,10 +164,8 @@ public class WordsFragment extends Fragment {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
 //            Log.d(TAG, "OnDestroyActionMode() called");
-            updateArchivedWords();
             updateListView();
             isActionMode = false;
-            selectedItemPositions.clear();
         }
     };
 
@@ -254,79 +238,46 @@ public class WordsFragment extends Fragment {
                 materialListView.add(card);
             }
         }
+        materialListView.setBackgroundColor(Color.WHITE);
     }
 
-    private void updateArchivedWords() {
-        mArchivedWords = new ArrayList<>();
-        for (Word word : mWords) {
-            if (word.isArchived()) {
-                mArchivedWords.add(word);
-            }
-        }
-    }
-
-    private Word getWord(UUID uuid) {
-        for (Word word : mWords) {
-            if (word.getUUID().equals(uuid)) {
-                return word;
-            }
-        }
-        return null;
-    }
-
-    private void unArchiveWord(int position) {
-        if (!mArchivedWords.isEmpty()) {
-            getWord(mArchivedWords.get(position).getUUID()).setArchived(false);
-        }
-    }
-
-    private void unArchiveWords(ArrayList<Integer> positions) {
-        if (positions.isEmpty()) {
-            return;
-        }
-        for (Integer position : positions) {
-            unArchiveWord(position);
-        }
-    }
-
-    private void deleteWord(int position) {
-        if (!mWords.isEmpty()) {
-            mWords.remove(mArchivedWords.get(position));
-        }
-    }
-
-    private void deleteWords(ArrayList<Integer> positions) {
-        if (positions.isEmpty()) {
+    private void unArchiveWords() {
+        if (selectedWords.isEmpty()) {
             return;
         }
 
-        for (Integer position : positions) {
-            deleteWord(position);
+        for (Word word : selectedWords) {
+            word.setArchived(false);
+            WordManger.get(getActivity()).updateWord(word);
         }
+        mArchivedWords.removeAll(selectedWords);
     }
 
+    private void deleteWords() {
+//        Log.d(TAG,"deleteWords() called positions:" + positions);
+        if (selectedWords.isEmpty()) {
+            return;
+        }
+        for (Word word : selectedWords) {
+            WordManger.get(getActivity()).deleteWord(word);
+        }
+        mArchivedWords.removeAll(selectedWords);
+    }
 
     private void selectAll() {
-        selectedItemPositions.clear();
-        for (int i = 0; i < mArchivedWords.size(); i++) {
-            selectedItemPositions.add(i);
+        if (mArchivedWords.isEmpty()) {
+            return;
         }
+        selectedWords = mArchivedWords;
     }
 
     private void checkAll() {
+        if (mArchivedWords.isEmpty()) {
+            return;
+        }
         materialListView.setBackgroundColor(Color.parseColor(MainActivity.SELECTED_COLOR));
 
     }
-
-    private boolean isSelected(int position) {
-        for (int pos : selectedItemPositions) {
-            if (pos == position) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void showToast(String message, int duration) {
         Toast.makeText(getActivity(), message, duration).show();
     }

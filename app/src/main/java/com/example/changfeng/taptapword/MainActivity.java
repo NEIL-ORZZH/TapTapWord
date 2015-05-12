@@ -30,6 +30,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -77,8 +78,8 @@ public class MainActivity extends ActionBarActivity {
                 new DrawerItem(DrawerItem.Type.DIVIDER),
                 new DrawerMenu().setIconRes(R.drawable.abc_ic_menu_share_mtrl_alpha).setText(getString(R.string.menu_share)),
                 new DrawerMenu().setIconRes(R.drawable.ic_contact).setText(getString(R.string.menu_contact_us)),
-                new DrawerMenu().setIconRes(R.drawable.ic_about).setText(getString(R.string.menu_about)),
-                new DrawerMenu().setIconRes(R.drawable.ic_about).setText("test"));
+                new DrawerMenu().setIconRes(R.drawable.ic_about).setText(getString(R.string.menu_about)));
+//                new DrawerMenu().setIconRes(R.drawable.ic_about).setText("test"));
         drawerOptions.setLayoutManager(new LinearLayoutManager(this));
         final DrawerItemAdapter adapter = new DrawerItemAdapter(drawerItems);
         adapter.setOnItemClickListener(new DrawerItemAdapter.OnItemClickListener() {
@@ -133,9 +134,9 @@ public class MainActivity extends ActionBarActivity {
                         setupFragment(new AboutFragment());
                         setTitle(getString(R.string.menu_about));
                         break;
-                    case 13:
-                        setupFragment(new TestFragment());
-                        break;
+//                    case 13:
+//                        setupFragment(new TestFragment());
+//                        break;
                     default:
                         break;
                 }
@@ -157,40 +158,30 @@ public class MainActivity extends ActionBarActivity {
             word.setAmPhone(getString(R.string.word_word_ph_am));
             word.setEnPhone(getString(R.string.word_word_ph_en));
             word.setMeans(getString(R.string.word_word_means));
-            WordLab.get(getApplicationContext()).addWord(word);
-            WordManger.get(getApplicationContext()).insertWord(word);
 
             Word ninjaWord = new Word();
             ninjaWord.setName(getString(R.string.word_ninja_name));
             ninjaWord.setAmPhone(getString(R.string.word_ninja_ph_am));
             ninjaWord.setEnPhone(getString(R.string.word_ninja_ph_en));
             ninjaWord.setMeans(getString(R.string.word_ninja_means));
-            WordLab.get(getApplicationContext()).addWord(ninjaWord);
-            WordManger.get(getApplicationContext()).insertWord(ninjaWord);
 
             Word recentWord = new Word();
             recentWord.setName(getString(R.string.word_recent_name));
             recentWord.setAmPhone(getString(R.string.word_recent_ph_am));
             recentWord.setEnPhone(getString(R.string.word_recent_ph_en));
             recentWord.setMeans(getString(R.string.word_recent_means));
-            WordLab.get(getApplicationContext()).addWord(recentWord);
-            WordManger.get(getApplicationContext()).insertWord(recentWord);
 
             Word archiveWord = new Word();
             archiveWord.setName(getString(R.string.word_archive_name));
             archiveWord.setAmPhone(getString(R.string.word_archive_ph_am));
             archiveWord.setEnPhone(getString(R.string.word_archive_ph_en));
             archiveWord.setMeans(getString(R.string.word_archive_means));
-            WordLab.get(getApplicationContext()).addWord(archiveWord);
-            WordManger.get(getApplicationContext()).insertWord(archiveWord);
 
             Word deleteWord = new Word();
             deleteWord.setName(getString(R.string.word_delete_name));
             deleteWord.setAmPhone(getString(R.string.word_delete_ph_am));
             deleteWord.setEnPhone(getString(R.string.word_delete_ph_en));
             deleteWord.setMeans(getString(R.string.word_delete_means));
-            WordLab.get(getApplicationContext()).addWord(deleteWord);
-            WordManger.get(getApplicationContext()).insertWord(deleteWord);
 
             Word unarchiveWord = new Word();
             unarchiveWord.setName(getString(R.string.word_unarchive_name));
@@ -198,8 +189,6 @@ public class MainActivity extends ActionBarActivity {
             unarchiveWord.setEnPhone(getString(R.string.word_unarchive_ph_en));
             unarchiveWord.setMeans(getString(R.string.word_unarchive_means));
             unarchiveWord.setArchived(true);
-            WordLab.get(getApplicationContext()).addWord(unarchiveWord);
-            WordManger.get(getApplicationContext()).insertWord(unarchiveWord);
 
             Word delete2Word = new Word();
             delete2Word.setName(getString(R.string.word_delete2_name));
@@ -207,10 +196,17 @@ public class MainActivity extends ActionBarActivity {
             delete2Word.setEnPhone(getString(R.string.word_delete2_ph_en));
             delete2Word.setMeans(getString(R.string.word_delete2_means));
             delete2Word.setArchived(true);
-            WordLab.get(getApplicationContext()).addWord(delete2Word);
-            WordManger.get(getApplicationContext()).insertWord(delete2Word);
 
-            WordLab.get(getApplicationContext()).saveWords();
+            ArrayList<Word> words = new ArrayList<>();
+            words.add(delete2Word);
+            words.add(unarchiveWord);
+            words.add(deleteWord);
+            words.add(archiveWord);
+            words.add(recentWord);
+            words.add(ninjaWord);
+            words.add(word);
+
+            WordManger.get(getApplicationContext()).insertWords(words);
 
         } else {
             setupFragment(new RecentWordFragment());
@@ -218,25 +214,6 @@ public class MainActivity extends ActionBarActivity {
         }
 
         startClipboardService();
-
-//        for (int i = 0; i < 100; i++) {
-//            Word word = new Word();
-//            word.setLanguage("English");
-//            word.setName("chang");
-//            word.setAmPhone("am");
-//            word.setEnPhone("en");
-//            word.setMeans("hhhh");
-//            word.setArchived(true);
-//            word.setYear(2015);
-//            word.setMonth(5);
-//            word.setDate(10);
-//            word.setHour(18);
-//            word.setMonth(14);
-//            word.setMinute(22);
-//            word.setSecond(i);
-//            WordManger.get(getApplicationContext()).insertWord(word);
-//        }
-
 
     }
 

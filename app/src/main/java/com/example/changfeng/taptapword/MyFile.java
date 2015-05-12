@@ -68,35 +68,6 @@ public class MyFile {
         }
     }
 
-    public  static boolean copyFile(File srcPath, File dstPath) {
-        try {
-            int byteSum = 0;
-            int byteRead;
-
-            if (srcPath.exists() && dstPath.createNewFile() && dstPath.setWritable(true)) { //文件存在时
-                InputStream inStream = new FileInputStream(srcPath); //读入原文件
-                RandomAccessFile raf = new RandomAccessFile(dstPath, "rw");
-
-
-                byte[] buffer = new byte[1024];
-                while ( (byteRead = inStream.read(buffer)) != -1) {
-                    byteSum += byteRead; //字节数 文件大小
-                    System.out.println(byteSum);
-                    raf.seek(dstPath.length());
-                    raf.write(buffer);
-//                    Log.d(TAG, "copy :" + byteRead + "bytes");
-                }
-                inStream.close();
-                raf.close();
-            }
-            return true;
-        }
-        catch (Exception e) {
-//            Log.e(TAG, "copyFile() failed", e);
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     public static boolean deleleFile(String fileName){
         File file = new File(fileName);
@@ -105,5 +76,42 @@ public class MyFile {
         }
         return false;
     }
+
+
+    public static boolean copyFile(String oldPath, String newPath)
+    {
+        try
+        {
+            int bytesum = 0;
+            int byteread = 0;
+            File oldfile = new File(oldPath);
+            File newfile = new File(newPath);
+            if (!newfile.exists())
+            {
+                newfile.createNewFile();
+            }
+            if (oldfile.exists())
+            { // 文件存在时
+                InputStream inStream = new FileInputStream(oldPath); // 读入原文件
+                FileOutputStream fs = new FileOutputStream(newPath);
+                byte[] buffer = new byte[1444];
+                while ((byteread = inStream.read(buffer)) != -1)
+                {
+                    bytesum += byteread; // 字节数 文件大小
+                    fs.write(buffer, 0, byteread);
+                }
+                inStream.close();
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+
+        }
+
+    }
+
 
 }

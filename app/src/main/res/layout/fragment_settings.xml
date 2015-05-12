@@ -40,7 +40,7 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
                 android:text="@string/reset_all_data"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
                 android:text="@string/reset_all_preference"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -88,7 +88,7 @@
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="@string/backup"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <View
             android:layout_width="match_parent"
@@ -103,7 +103,7 @@
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="@string/restore"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <View
             android:layout_width="match_parent"
@@ -119,7 +119,7 @@
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="@string/clear_backup_data"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <View
             android:layout_width="match_parent"

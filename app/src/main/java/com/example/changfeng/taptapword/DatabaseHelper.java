@@ -94,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public WordCursor queryWords() {
-        Cursor wrapped = getReadableDatabase().query(TABLE_WORD, null, null,null,null,null, "desc");
+        Cursor wrapped = getReadableDatabase().query(TABLE_WORD, null, null,null,null,null, null);
         Log.d(TAG, wrapped.getColumnCount() + " " + wrapped.getColumnNames());
         return new WordCursor(wrapped);
     }
@@ -102,7 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private ArrayList<Word> getWords(Cursor cursor) {
         ArrayList<Word> words = new ArrayList<>();
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToLast()) {
             do {
                 Word word = new Word();
                 word.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_WORD_ID)));
@@ -123,7 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 word.setMinute(cursor.getInt(cursor.getColumnIndex(COLUMN_MINUTE)));
                 word.setSecond(cursor.getInt(cursor.getColumnIndex(COLUMN_SECOND)));
                 words.add(word);
-            } while (cursor.moveToNext());
+            } while (cursor.moveToPrevious());
         }
         return words;
     }

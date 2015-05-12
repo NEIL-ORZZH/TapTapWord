@@ -32,7 +32,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "SettingsFragment";
     static final int REQUEST_BACKUP_FILE = 1;
-    private static final String FILE_KEY_WORD = "TapTapWord";
+    private static final String FILE_KEY_WORD = "word_ninja";
 
     private TextView resetAllDataTextView;
     private TextView resetAllPreferencesTextView;
@@ -97,9 +97,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 backupDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        File file = MyFile.getOutputBackupFile();
-                        if (WordLab.get(getActivity()).backupWords(file)) {
-                            showToast(getString(R.string.message_data_backupped) + file.getAbsolutePath(), Toast.LENGTH_SHORT);
+
+                        if (WordManger.get(getActivity()).copyDbToSdcard()) {
+                            showToast(getString(R.string.message_data_backupped), Toast.LENGTH_SHORT);
                         } else {
                             showToast(getString(R.string.message_data_backupped_failed), Toast.LENGTH_SHORT);
                         }
@@ -115,7 +115,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(View v){
                         Intent intent = new Intent(getActivity(), FileListActivity.class);
-                        intent.putExtra(FileListActivity.FILE_KEY_WORD, "TapTapWord");
+                        intent.putExtra(FileListActivity.FILE_KEY_WORD, "word_ninja");
                         startActivityForResult(intent, REQUEST_BACKUP_FILE);
                     }
                 });
@@ -144,10 +144,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_BACKUP_FILE:
-                    Bundle bundle = data.getExtras();
-                    String filename = bundle.getString(FileListActivity.FILE_KEY_WORD);
-                    WordLab.get(getActivity()).restoreWords(new File(filename));
-                    showToast(getString(R.string.message_data_restored), Toast.LENGTH_SHORT);
+                    if (WordManger.get(getActivity()).restorDb(data.getExtras().getString(FileListActivity.FILE_KEY_WORD))) {
+                        showToast(getString(R.string.message_data_restored), Toast.LENGTH_SHORT);
+                    } else {
+                        showToast(getString(R.string.message_data_restored_failed), Toast.LENGTH_SHORT);
+                    }
                     break;
                 default:
                     break;

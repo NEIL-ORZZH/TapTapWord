@@ -74,8 +74,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 dataDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        WordLab.get(getActivity()).clear();
-                        WordLab.get(getActivity()).saveWords();
+
                     }
                 });
                 dataDialog.setCancelable(true);

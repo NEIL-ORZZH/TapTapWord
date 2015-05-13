@@ -51,7 +51,6 @@ public class RecentWordFragment extends Fragment {
         View view = inflater.inflate(R.layout.material_list_view, container, false);
         materialListView = (MaterialListView) view.findViewById(R.id.material_listview);
 
-//        mWords = WordLab.get(getActivity()).getWords();
         mRecentWords = WordManger.get(getActivity()).getUnarchivedWords();
 
         materialListView.addOnItemTouchListener(new RecyclerItemClickListener.OnItemClickListener() {

@@ -215,8 +215,6 @@ public class ResultActivity extends Activity {
         word.setHour(c.get(Calendar.HOUR_OF_DAY));
         word.setMinute(c.get(Calendar.MINUTE));
         word.setSecond(c.get(Calendar.SECOND));
-        WordLab.get(getApplicationContext()).addWord(word);
-        WordLab.get(getApplicationContext()).saveWords();
 
         WordManger.get(getApplicationContext()).insertWord(word);
 

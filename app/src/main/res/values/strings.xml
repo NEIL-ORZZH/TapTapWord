@@ -12,7 +12,7 @@
     <string name="menu_settings">设置</string>
     <string name="menu_help">帮助</string>
     <string name="menu_about">关于</string>
-    <string name="menu_contact_us">给我们发邮件</string>
+    <string name="menu_contact_us">联系我们</string>
     <string name="menu_share">分享</string>
     <string name="requesting_result_from_internet">正在进行在线查询，请稍候…</string>
     <string name="about">Powered by changfeng\nchangfeng1050@hotmail.com</string>
@@ -121,6 +121,8 @@
     <string name="msg_not_support_other_language">抱歉，单词忍者暂时无法窃取英文以外的情报</string>
 
     <string name="uri_download_wandoujia">http://www.wandoujia.com/apps/com.example.changfeng.taptapword</string>
+
+    <string name="msg_no_email_apps_found">没有找到邮箱应用，你可以到应用市场下载邮箱应用</string>
 
 
 <!-- TODO: Remove or change this placeholder text -->

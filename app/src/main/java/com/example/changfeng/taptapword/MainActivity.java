@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -301,12 +303,19 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void sendMailByIntent() {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("application/octet-stream");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.mail_address)});
+        Uri uri = Uri.parse("mailto:" + getString(R.string.mail_address));
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject));
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_text));
-        startActivity(Intent.createChooser(intent, "请选择你的邮箱应用"));
+
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
+        if (activities.size() > 0) {
+            startActivity(Intent.createChooser(intent, "请选择你的邮箱应用"));
+        } else {
+            showToast(getString(R.string.msg_no_email_apps_found));
+        }
+
     }
 
 

@@ -155,6 +155,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         getWritableDatabase().replace(TABLE_WORD, "_id", getContentValues(word));
     }
 
+    public void deleteExistingWords(Word word) {
+        Cursor cursor = getReadableDatabase().query(TABLE_WORD, null, COLUMN_NAME +"=?", new String[] {word.getName()},null,null, null);
+        if (cursor.moveToLast()) {
+            do {
+               getWritableDatabase().delete(TABLE_WORD, COLUMN_NAME +"=?", new String[] {word.getName()});
+            } while (cursor.moveToPrevious());
+        }
+
+    }
     public static class WordCursor extends CursorWrapper{
 
         public WordCursor(Cursor c) {

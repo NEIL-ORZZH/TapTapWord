@@ -36,9 +36,13 @@ public class WordManger {
     }
 
     public void insertWord(Word word) {
+        mHelper.deleteExistingWords(word);
         mHelper.insertWord(word);
     }
 
+    public void deleteExistingWords(Word word) {
+        mHelper.deleteExistingWords(word);
+    }
     public void insertWords(ArrayList<Word> words) {
         for (Word word : words) {
             mHelper.insertWord(word);

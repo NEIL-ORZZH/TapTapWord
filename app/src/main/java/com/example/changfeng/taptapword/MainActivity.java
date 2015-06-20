@@ -108,8 +108,8 @@ public class MainActivity extends ActionBarActivity {
                             startClipboardService();
                             showToast("单词忍者正在监听");
                         } else {
-                            startClipboardService();
-                            showToast("单词忍者正在监听");
+                            stopClipboardService();
+                            showToast("单词忍者停止监听");
                         }
                         isWatchOn = !isWatchOn;
                         break;
@@ -216,7 +216,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         startClipboardService();
-
+        showToast("单词忍者正在监听");
     }
 
     @Override
@@ -271,7 +271,6 @@ public class MainActivity extends ActionBarActivity {
     void stopClipboardService() {
         Intent stopIntent = new Intent(MainActivity.this, ClipboardService.class);
         stopService(stopIntent);
-
     }
 
     public static boolean isServiceRunning(Context mContext, String className) {

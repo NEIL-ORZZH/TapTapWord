@@ -14,9 +14,9 @@ public class ClipboardService extends Service {
 
     private static final String TAG = "ClipboardService";
 
-    private static int count = 0;
-
     public static final String clipboardText = "clipboardText";
+
+    private ClipboardManager cb;
 
     public ClipboardService() {
     }
@@ -26,8 +26,8 @@ public class ClipboardService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        count++;
 //        showToast(TAG + " OnCreate() " + count + " times.");
+        MyLog.d(TAG, "onCreate()");
     }
 
     @Override
@@ -40,52 +40,17 @@ public class ClipboardService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        final ClipboardManager cb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        cb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         cb.setPrimaryClip(ClipData.newPlainText("", ""));
-        cb.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
-
-
-            @Override
-            public void onPrimaryClipChanged() {
-
-                if (cb.hasPrimaryClip()) {
-                    for (int i = 0; i < cb.getPrimaryClip().getItemCount(); i++) {
-
-//                        Log.d(TAG, "onPrimaryClipChanged() " + cb.getPrimaryClip().getItemAt(i).getText());
-                        if (cb.getPrimaryClip().getItemAt(i).getText() != null && cb.getPrimaryClip().getItemAt(i).getText().length() > 0) {
-                            if (!cb.getPrimaryClip().getItemAt(i).getText().toString().trim().isEmpty()) {
-                                String clipboardItem = cb.getPrimaryClip().getItemAt(i).getText().toString().trim();
-
-                                if (!isEnglishWord(clipboardItem)) {
-                                    showToast(getString(R.string.msg_not_support_other_language));
-                                    break;
-                                }
-
-                                Intent intent = new Intent();
-                                intent.setClassName("com.example.changfeng.taptapword", "com.example.changfeng.taptapword.ResultActivity");
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.putExtra(clipboardText, clipboardItem);
-                                startActivity(intent);
-                                break;
-                            }
-                        }
-                    }
-                }
-//                Toast.makeText(getApplicationContext(), TAG + " " + cb.getPrimaryClip().getItemAt(0).getText(), Toast.LENGTH_SHORT).show();
-//                startAPP("bingdic.android.activity");
-            }
-        });
+        cb.addPrimaryClipChangedListener(cbListener);
         return super.onStartCommand(intent, flags, startId);
     }
 
-
-    public void startAPP(String appPackageName){
-        try{
-            Intent intent = this.getPackageManager().getLaunchIntentForPackage(appPackageName);
-            startActivity(intent);
-        }catch(Exception e){
-            Toast.makeText(this, "没有安装", Toast.LENGTH_LONG).show();
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cb.removePrimaryClipChangedListener(cbListener);
+        MyLog.d(TAG, "onDestroy()");
     }
 
     private Boolean isEnglishWord(String word) {
@@ -97,6 +62,33 @@ public class ClipboardService extends Service {
         }
         return true;
     }
+
+   ClipboardManager.OnPrimaryClipChangedListener cbListener = new ClipboardManager.OnPrimaryClipChangedListener() {
+       @Override
+       public void onPrimaryClipChanged() {
+           if (cb.hasPrimaryClip()) {
+               for (int i = 0; i < cb.getPrimaryClip().getItemCount(); i++) {
+
+                   if (cb.getPrimaryClip().getItemAt(i).getText() != null && cb.getPrimaryClip().getItemAt(i).getText().length() > 0) {
+                       if (!cb.getPrimaryClip().getItemAt(i).getText().toString().trim().isEmpty()) {
+                           String clipboardItem = cb.getPrimaryClip().getItemAt(i).getText().toString().trim();
+
+                           if (!isEnglishWord(clipboardItem)) {
+                               break;
+                           }
+
+                           Intent intent = new Intent();
+                           intent.setClassName("com.example.changfeng.taptapword", "com.example.changfeng.taptapword.ResultActivity");
+                           intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                           intent.putExtra(clipboardText, clipboardItem);
+                           startActivity(intent);
+                           break;
+                       }
+                   }
+               }
+           }
+       }
+   };
 
     void showToast(String info) {
         Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT).show();

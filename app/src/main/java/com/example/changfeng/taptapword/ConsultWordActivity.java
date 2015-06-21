@@ -97,6 +97,8 @@ public class ConsultWordActivity extends Activity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_new_word_button:
+                resultTextView.setText("");
+                resultTextView.setVisibility(View.GONE);
                 String word = wordEditText.getText().toString();
                 if (isEnglishWord(word)) {
                     state = STATE_ORIGIN;

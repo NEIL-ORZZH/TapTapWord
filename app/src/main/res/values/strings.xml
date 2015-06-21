@@ -124,10 +124,15 @@
 
     <string name="msg_no_email_apps_found">没有找到邮箱应用，你可以到应用市场下载邮箱应用</string>
 
+    <string name="new_word">添加单词</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_word">WordActivity</string>
     <string name="title_activity_file_list">FileListActivity</string>
+    <string name="title_activity_consult_word">ConsultWord</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

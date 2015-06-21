@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,19 +23,74 @@ import com.dexafree.materialList.model.CardItemView;
 import com.dexafree.materialList.view.MaterialListView;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class RecentWordFragment extends Fragment {
 
     private static final String TAG = "RecentWordFragment";
 
     private static final int REQUEST_WORD = 1;
+    MaterialListView materialListView;
     private Word currentWord;
     private ArrayList<Word> selectedWords;
     private ArrayList<Word> mRecentWords = new ArrayList<>();
     private boolean isActionMode = false;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
-    MaterialListView materialListView;
+        // Called when the action mode is created; startActionMode() was called
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            isActionMode = true;
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.context_recent_words_menu, menu);
+            return true;
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    if (!selectedWords.isEmpty()) {
+                        deleteWords();
+                        showToast(getString(R.string.message_delete_success), Toast.LENGTH_SHORT);
+//                    Log.d(TAG, "delete words:" + selectedItemPositions);
+                        mode.finish();
+                    }
+                    break;
+                case R.id.action_archive:
+                    if (!selectedWords.isEmpty()) {
+                        archiveWords();
+                        showToast(getString(R.string.message_archive_success), Toast.LENGTH_SHORT);
+//                    Log.d(TAG, "archived words Positions:" + selectedItemPositions);
+                    }
+                    mode.finish();
+                    break;
+                case R.id.action_select_all:
+                    selectAll();
+                    checkAll();
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        }
+
+        // Called when the user exits the action mode
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+//            Log.d(TAG, "onDestroyActionMode() called");
+            updateListView(Color.WHITE);
+            isActionMode = false;
+        }
+    };
 
     @Override
     public void onResume() {
@@ -46,11 +100,16 @@ public class RecentWordFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        return inflater.inflate(R.layout.fragment_simple, container, false);
         View view = inflater.inflate(R.layout.material_list_view, container, false);
         materialListView = (MaterialListView) view.findViewById(R.id.material_listview);
-
         mRecentWords = WordManger.get(getActivity()).getUnarchivedWords();
 
         materialListView.addOnItemTouchListener(new RecyclerItemClickListener.OnItemClickListener() {
@@ -144,63 +203,24 @@ public class RecentWordFragment extends Fragment {
 
     }
 
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fratment_new_word, menu);
+    }
 
-        // Called when the action mode is created; startActionMode() was called
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            isActionMode = true;
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.context_recent_words_menu, menu);
-            return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_word:
+                Intent i = new Intent(getActivity(), ConsultWordActivity.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
-        }
-
-        // Called when the user selects a contextual menu item
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_delete:
-                    if (!selectedWords.isEmpty()) {
-                        deleteWords();
-                        showToast(getString(R.string.message_delete_success), Toast.LENGTH_SHORT);
-//                    Log.d(TAG, "delete words:" + selectedItemPositions);
-                        mode.finish();
-                    }
-                    break;
-                case R.id.action_archive:
-                    if (!selectedWords.isEmpty()) {
-                        archiveWords();
-                        showToast(getString(R.string.message_archive_success), Toast.LENGTH_SHORT);
-//                    Log.d(TAG, "archived words Positions:" + selectedItemPositions);
-                    }
-                    mode.finish();
-                    break;
-                case R.id.action_select_all:
-                    selectAll();
-                    checkAll();
-                    break;
-                default:
-                    return false;
-            }
-            return  true;
-        }
-
-        // Called when the user exits the action mode
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-//            Log.d(TAG, "onDestroyActionMode() called");
-            updateListView(Color.WHITE);
-            isActionMode = false;
-        }
-    };
 
     private void updateListView(int color) {
         materialListView.removeAllViews();

@@ -17,7 +17,7 @@ public class MyLog {
     /**
      * 是否开启debug
      */
-    private static boolean isDebug = true;
+    private static boolean isDebug = false;
 
     public static void enableLog(boolean flag) {
         isDebug = flag;

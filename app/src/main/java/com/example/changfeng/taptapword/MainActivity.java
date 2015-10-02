@@ -35,10 +35,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
-
-import net.youmi.android.AdManager;
-import net.youmi.android.spot.SpotManager;
 
 public class MainActivity extends ActionBarActivity {
 
